@@ -14,7 +14,7 @@ export const BUSINESS_INFO = {
   city: '2710-573 Sintra, Portugal',
   openingHours: 'Segunda a Sábado: 09:00 - 20:00',
   bookingUrl: 'https://wa.me/351910152688', 
-  googleMapsUrl: 'https://maps.app.goo.gl/YourNewSintraMapLink', // Atualizar com link real se necessário
+  googleMapsUrl: 'https://maps.app.goo.gl/Mes2wiu4m1G6Mweu7', 
   instagramUrl: 'https://instagram.com/labarbiere' 
 };
 

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Scissors, Menu, X, Phone } from 'lucide-react';
-import { BUSINESS_INFO } from '../constants';
+import { BUSINESS_INFO, CLIENT_ID } from '../constants';
+import { db } from '../firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
-// Definimos a interface para receber a função que abre o login
+// Interface para receber a função que abre o login
 interface NavbarProps {
   onAdminClick: () => void;
 }
@@ -10,6 +12,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [dynamicBookingUrl, setDynamicBookingUrl] = useState(BUSINESS_INFO.bookingUrl);
   
   // --- LÓGICA DO CLIQUE SECRETO (EASTER EGG) ---
   const [clickCount, setClickCount] = useState(0);
@@ -24,10 +27,26 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
 
     if (clickCount + 1 === 5) {
       clearTimeout(timer);
-      onAdminClick(); // Dispara a abertura do modal de login
+      onAdminClick(); // Dispara o modal de login
       setClickCount(0);
     }
   };
+
+  // --- ESCUTAR METADADOS PARA LINK DE RESERVA DINÂMICO ---
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "businesses", CLIENT_ID, "config", "metadata"), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        // Se houver um link de whatsapp/reserva nos metadados, usa-o. Caso contrário, usa o do constants.
+        if (data.socialLinks?.whatsapp) {
+          setDynamicBookingUrl(data.socialLinks.whatsapp);
+        } else {
+          setDynamicBookingUrl(BUSINESS_INFO.bookingUrl);
+        }
+      }
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black/95 backdrop-blur-md py-4 shadow-xl border-b border-emerald-900/20' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
         
-        {/* LOGO LA BARBIÈRE COM ACESSO SECRETO */}
+        {/* LOGO COM ACESSO SECRETO */}
         <div 
           className="flex items-center gap-2 group cursor-pointer select-none" 
           onClick={handleLogoClick}
@@ -75,7 +94,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
             </a>
           ))}
           <a 
-            href={BUSINESS_INFO.bookingUrl}
+            href={dynamicBookingUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-emerald-900/20 uppercase tracking-wide flex items-center gap-2"
@@ -109,13 +128,13 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
               </a>
             ))}
             <a 
-              href={BUSINESS_INFO.bookingUrl}
+              href={dynamicBookingUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-emerald-600 text-white text-center py-4 rounded-xl font-bold mt-2 shadow-lg uppercase"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Reservar Cita
+              Marcar Agora
             </a>
           </div>
         </div>

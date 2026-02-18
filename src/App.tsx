@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { 
   Scissors, MapPin, Phone, Clock, Star, 
   CheckCircle2, Quote, ArrowRight, ShieldCheck, 
-  Heart, Users, ExternalLink, Camera, Sparkles, Loader2
+  Heart, Users, ExternalLink, Camera, Sparkles, Loader2,
+  Instagram, Facebook, Music2 // Music2 representa o TikTok
 } from 'lucide-react';
 
 // FIREBASE
 import { db } from './firebase';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, doc } from 'firebase/firestore';
 
 // COMPONENTES
 import Navbar from './components/Navbar';
@@ -15,9 +16,9 @@ import BookingModal from './components/BookingModal';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 
-// DADOS E IMAGENS (Utilizando a nova estrutura GALLERY_IMAGES)
+// DADOS E IMAGENS
 import { BUSINESS_INFO, REVIEWS, GALLERY_IMAGES, CLIENT_ID } from './constants';
-import { Service } from './types';
+import { Service, SocialLinks } from './types';
 import mapaImg from './assets/images/mapa-localizacao.webp'; 
 
 const MAP_SOURCE = mapaImg;
@@ -31,6 +32,12 @@ const App: React.FC = () => {
   // --- ESTADOS DE DADOS DINÂMICOS ---
   const [dynamicServices, setDynamicServices] = useState<Service[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
+  
+  // Metadados Visuais (Redes Sociais e Fotos do Firestore)
+  const [visualMetadata, setVisualMetadata] = useState<{
+    socialLinks?: SocialLinks;
+    galleryUrls?: string[];
+  }>({});
 
   // --- ESCUTAR SERVIÇOS DO FIREBASE (Multi-tenant) ---
   useEffect(() => {
@@ -51,14 +58,31 @@ const App: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  // --- ESCUTAR METADADOS (Redes Sociais e Galeria) ---
+  useEffect(() => {
+    const unsubMetadata = onSnapshot(doc(db, "businesses", CLIENT_ID, "config", "metadata"), (snap) => {
+      if (snap.exists()) {
+        setVisualMetadata(snap.data());
+      }
+    });
+    return () => unsubMetadata();
+  }, []);
+
+  // Função auxiliar para pegar foto (Firestore ou Local Fallback)
+  const getImg = (index: number) => {
+    if (visualMetadata.galleryUrls && visualMetadata.galleryUrls[index]) {
+      return visualMetadata.galleryUrls[index];
+    }
+    return GALLERY_IMAGES[index]?.url;
+  };
+
   return (
-    // TEMA: Gris oscuro y Emerald (emerald-600) para La Barbière
     <div className="min-h-screen flex flex-col selection:bg-emerald-600/30 selection:text-emerald-900 bg-stone-50">
       
-      {/* NAVBAR com a função secreta de 5 cliques */}
+      {/* NAVBAR */}
       <Navbar onAdminClick={() => setIsAdminLoginOpen(true)} />
 
-      {/* COMPONENTES ADMINISTRATIVOS */}
+      {/* ADMIN COMPONENTS */}
       <AdminLogin 
         isOpen={isAdminLoginOpen} 
         onClose={() => setIsAdminLoginOpen(false)} 
@@ -69,7 +93,7 @@ const App: React.FC = () => {
         <AdminDashboard onLogout={() => setIsDashboardOpen(false)} />
       )}
 
-      {/* MODAL DE AGENDAMENTO */}
+      {/* BOOKING MODAL */}
       <BookingModal 
         isOpen={isBookingOpen} 
         onClose={() => setIsBookingOpen(false)} 
@@ -78,8 +102,11 @@ const App: React.FC = () => {
       {/* HERO SECTION */}
       <section id="inicio" className="relative min-h-[90vh] md:min-h-[95vh] flex items-center justify-center overflow-hidden bg-stone-900">
         <div className="absolute inset-0 z-0">
-          {/* Usamos a primeira imagem da galeria como Hero */}
-          <img src={GALLERY_IMAGES[0].url} alt={BUSINESS_INFO.name} className="w-full h-full object-cover opacity-40 scale-105" />
+          <img 
+            src={getImg(0)} 
+            alt={BUSINESS_INFO.name} 
+            className="w-full h-full object-cover opacity-40 scale-105" 
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-stone-900/90 to-stone-900"></div> 
         </div>
 
@@ -175,7 +202,7 @@ const App: React.FC = () => {
         <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl aspect-[4/5] border-8 border-stone-100">
-                <img src={GALLERY_IMAGES[4].url} alt={BUSINESS_INFO.name} className="w-full h-full object-cover" />
+                <img src={getImg(4)} alt={BUSINESS_INFO.name} className="w-full h-full object-cover" />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-stone-900 text-white p-8 rounded-3xl max-w-xs shadow-2xl z-20 hidden md:block">
                 <Quote className="text-emerald-500 mb-4" size={32} />
@@ -195,7 +222,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* GALERÍA ATUALIZADA */}
+      {/* GALERÍA DINÂMICA E REDES SOCIAIS */}
       <section className="py-20 md:py-24 bg-stone-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -203,15 +230,44 @@ const App: React.FC = () => {
              <p className="text-stone-500">Trabalhos reais, brio constante.</p>
           </div>
           <div className="columns-2 md:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
-            {GALLERY_IMAGES.map((img) => (
-              <div key={img.id} className="rounded-2xl md:rounded-3xl overflow-hidden group break-inside-avoid shadow-sm">
-                <img src={img.url} alt={img.alt} loading="lazy" className="w-full grayscale hover:grayscale-0 transition-all duration-700 hover:scale-110 cursor-pointer" />
+            {/* Renderizar os 8 slots de fotos */}
+            {[...Array(8)].map((_, idx) => (
+              <div key={idx} className="rounded-2xl md:rounded-3xl overflow-hidden group break-inside-avoid shadow-sm bg-stone-200">
+                <img 
+                  src={getImg(idx)} 
+                  alt={`Galeria ${idx + 1}`} 
+                  loading="lazy" 
+                  className="w-full grayscale hover:grayscale-0 transition-all duration-700 hover:scale-110 cursor-pointer" 
+                />
               </div>
             ))}
-            <div className="bg-emerald-600 aspect-[3/4] rounded-2xl md:rounded-3xl flex flex-col items-center justify-center p-4 md:p-8 text-center group break-inside-avoid shadow-lg">
-              <Camera size={32} className="text-white mb-3 md:mb-4 group-hover:scale-125 transition-transform" />
-              <h4 className="text-white font-black text-lg md:text-xl leading-tight">Segue-nos no Instagram</h4>
-              <a href={BUSINESS_INFO.instagramUrl} target="_blank" rel="noreferrer" className="mt-4 md:mt-6 text-white text-sm md:text-base font-bold border-b-2 border-white pb-1">@labarbiere</a>
+
+            {/* CARD SOCIAL DINÂMICO */}
+            <div className="bg-stone-900 aspect-[3/4] rounded-2xl md:rounded-3xl flex flex-col items-center justify-center p-4 md:p-8 text-center group break-inside-avoid shadow-lg border border-white/5">
+              <Camera size={32} className="text-emerald-500 mb-6 group-hover:scale-110 transition-transform" />
+              <h4 className="text-white font-black text-lg md:text-xl leading-tight mb-6">Acompanha-nos</h4>
+              
+              <div className="flex gap-4">
+                {visualMetadata.socialLinks?.instagram && (
+                  <a href={visualMetadata.socialLinks.instagram} target="_blank" rel="noreferrer" className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white hover:bg-emerald-700 transition-all hover:-translate-y-1">
+                    <Instagram size={24} />
+                  </a>
+                )}
+                {visualMetadata.socialLinks?.facebook && (
+                  <a href={visualMetadata.socialLinks.facebook} target="_blank" rel="noreferrer" className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white hover:bg-emerald-700 transition-all hover:-translate-y-1">
+                    <Facebook size={24} />
+                  </a>
+                )}
+                {visualMetadata.socialLinks?.tiktok && (
+                  <a href={visualMetadata.socialLinks.tiktok} target="_blank" rel="noreferrer" className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white hover:bg-emerald-700 transition-all hover:-translate-y-1">
+                    <Music2 size={24} />
+                  </a>
+                )}
+              </div>
+              
+              {!visualMetadata.socialLinks?.instagram && !visualMetadata.socialLinks?.facebook && !visualMetadata.socialLinks?.tiktok && (
+                <p className="text-stone-500 text-xs italic">Visita-nos em Sintra</p>
+              )}
             </div>
           </div>
         </div>
@@ -228,15 +284,15 @@ const App: React.FC = () => {
                 </p>
                 <div className="flex gap-4">
                    <div className="rounded-2xl overflow-hidden h-40 flex-1 border border-stone-100">
-                      <img src={GALLERY_IMAGES[5].url} alt="Espaço 1" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                      <img src={getImg(5)} alt="Espaço 1" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
                    </div>
                    <div className="rounded-2xl overflow-hidden h-40 flex-1 border border-stone-100">
-                      <img src={GALLERY_IMAGES[6].url} alt="Espaço 2" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                      <img src={getImg(6)} alt="Espaço 2" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
                    </div>
                 </div>
              </div>
              <div className="order-1 md:order-2 h-80 md:h-96 rounded-[3rem] overflow-hidden shadow-xl border-8 border-stone-50">
-                <img src={GALLERY_IMAGES[7].url} alt="Interior Principal" className="w-full h-full object-cover" />
+                <img src={getImg(7)} alt="Interior Principal" className="w-full h-full object-cover" />
              </div>
           </div>
         </div>
@@ -279,6 +335,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* FOOTER SOCIAL DINÂMICO */}
       <footer className="py-20 bg-stone-900 text-white text-center">
         <div className="flex flex-col items-center gap-6">
           <div className="flex items-center gap-3">
@@ -288,6 +345,25 @@ const App: React.FC = () => {
                 <p className="text-[10px] uppercase tracking-[0.3em] text-emerald-500 font-bold">{BUSINESS_INFO.subName}</p>
              </div>
           </div>
+          
+          <div className="flex gap-4">
+            {visualMetadata.socialLinks?.instagram && (
+              <a href={visualMetadata.socialLinks.instagram} target="_blank" rel="noreferrer" className="text-stone-400 hover:text-emerald-500 transition-colors">
+                <Instagram size={20} />
+              </a>
+            )}
+            {visualMetadata.socialLinks?.facebook && (
+              <a href={visualMetadata.socialLinks.facebook} target="_blank" rel="noreferrer" className="text-stone-400 hover:text-emerald-500 transition-colors">
+                <Facebook size={20} />
+              </a>
+            )}
+            {visualMetadata.socialLinks?.tiktok && (
+              <a href={visualMetadata.socialLinks.tiktok} target="_blank" rel="noreferrer" className="text-stone-400 hover:text-emerald-500 transition-colors">
+                <Music2 size={20} />
+              </a>
+            )}
+          </div>
+          
           <p className="text-stone-400 text-xs uppercase tracking-widest">© 2026 {BUSINESS_INFO.name} - Sintra, Portugal</p>
         </div>
       </footer>

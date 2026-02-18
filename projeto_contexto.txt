@@ -4,43 +4,43 @@ ARQUIVO: index.html
 ==================================================
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- SEO & WhatsApp Preview -->
-    <title>Peluquería Unisex Elías | Tu Peluquero en Badajoz - Calidad y Estilo</title>
-    <meta name="description" content="Descubre Peluquería Elías en Badajoz. Más de 30 años de experiencia en cortes unisex, peinados para eventos y coloración. Trato exquisito y profesionalidad." />
+    <title>La Barbière Espaço Homem | A Tua Barbearia em Sintra - Estilo e Brio</title>
+    <meta name="description" content="Descobre a La Barbière Espaço Homem em Sintra. Especialistas em cortes modernos, design de barba e um atendimento premium focado no perfeccionismo." />
     
     <!-- Metatags Open Graph (WhatsApp, Facebook) -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://peluqueria-elias.netlify.app/" />
-    <meta property="og:title" content="Peluquería Elías | Tu Estilo en Badajoz" />
-    <meta property="og:description" content="Más de 30 años de maestría y dedicación. Ven a conocernos y renueva tu imagen." />
-    <meta property="og:image" content="https://peluqueria-elias.netlify.app/capa-whatsapp.webp" />
+    <meta property="og:url" content="https://la-barbiere-sintra.netlify.app/" />
+    <meta property="og:title" content="La Barbière Espaço Homem | Sintra" />
+    <meta property="og:description" content="Mais do que uma barba, um estilo de vida. Vem conhecer o nosso espaço em Sintra." />
+    <meta property="og:image" content="https://la-barbiere-sintra.netlify.app/capa-whatsapp.webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
-    <!-- JSON-LD para Google Maps (SEO Local en España) -->
+    <!-- JSON-LD para Google Maps (SEO Local em Portugal) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "HairSalon",
-      "name": "Peluquería Unisex Elías León",
-      "telephone": "+34924252101",
+      "@type": "BarberShop",
+      "name": "La Barbière Espaço Homem",
+      "telephone": "+351910152688",
       "priceRange": "€€",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Pl. Francisco Vera, 2, Local 3E",
-        "addressLocality": "Badajoz",
-        "postalCode": "06011",
-        "addressCountry": "ES"
+        "streetAddress": "Av. Heliodoro Salgado 102",
+        "addressLocality": "Sintra",
+        "postalCode": "2710-573",
+        "addressCountry": "PT"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 38.8744,
-        "longitude": -6.9706
+        "latitude": 38.8021,
+        "longitude": -9.3813
       }
     }
     </script>
@@ -74,8 +74,8 @@ ARQUIVO: index.html
     <link rel="stylesheet" href="/src/index.css">
   </head>
   
-  <!-- Selección en color Rose para combinar con el logo -->
-  <body class="bg-black text-stone-100 selection:bg-rose-600 selection:text-white">
+  <!-- Seleção em cor Emerald para combinar com a nova identidade -->
+  <body class="bg-black text-stone-100 selection:bg-emerald-600 selection:text-white">
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
   </body>
@@ -133,8 +133,8 @@ import BookingModal from './components/BookingModal';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 
-// DADOS E IMAGENS (Adicionado CLIENT_ID)
-import { BUSINESS_INFO, REVIEWS, IMAGES, CLIENT_ID } from './constants';
+// DADOS E IMAGENS (Utilizando a nova estrutura GALLERY_IMAGES)
+import { BUSINESS_INFO, REVIEWS, GALLERY_IMAGES, CLIENT_ID } from './constants';
 import { Service } from './types';
 import mapaImg from './assets/images/mapa-localizacao.webp'; 
 
@@ -152,7 +152,6 @@ const App: React.FC = () => {
 
   // --- ESCUTAR SERVIÇOS DO FIREBASE (Multi-tenant) ---
   useEffect(() => {
-    // Aponta agora para a subcoleção específica deste CLIENT_ID
     const q = query(
       collection(db, "businesses", CLIENT_ID, "services"), 
       orderBy("name", "asc")
@@ -171,8 +170,8 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    // TEMA: Gris oscuro y Rosa Carmesim (Rose-600)
-    <div className="min-h-screen flex flex-col selection:bg-rose-600/30 selection:text-rose-200 bg-stone-50">
+    // TEMA: Gris oscuro y Emerald (emerald-600) para La Barbière
+    <div className="min-h-screen flex flex-col selection:bg-emerald-600/30 selection:text-emerald-900 bg-stone-50">
       
       {/* NAVBAR com a função secreta de 5 cliques */}
       <Navbar onAdminClick={() => setIsAdminLoginOpen(true)} />
@@ -197,51 +196,52 @@ const App: React.FC = () => {
       {/* HERO SECTION */}
       <section id="inicio" className="relative min-h-[90vh] md:min-h-[95vh] flex items-center justify-center overflow-hidden bg-stone-900">
         <div className="absolute inset-0 z-0">
-          <img src={IMAGES.interior[0].url} alt="Peluquería Elías León" className="w-full h-full object-cover opacity-30 scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-stone-900/90 to-stone-900"></div> 
+          {/* Usamos a primeira imagem da galeria como Hero */}
+          <img src={GALLERY_IMAGES[0].url} alt={BUSINESS_INFO.name} className="w-full h-full object-cover opacity-40 scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-stone-900/90 to-stone-900"></div> 
         </div>
 
         <div className="container mx-auto px-4 relative z-10 pt-24 md:pt-20">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex flex-wrap justify-center items-center gap-2 bg-rose-600/10 border border-rose-600/20 px-4 py-2 rounded-full mb-8 animate-fade-in text-rose-500">
+            <div className="inline-flex flex-wrap justify-center items-center gap-2 bg-emerald-600/10 border border-emerald-600/20 px-4 py-2 rounded-full mb-8 animate-fade-in text-emerald-500">
               <Star size={14} fill="currentColor" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em]">Tu Peluquería de Confianza en Badajoz</span>
-              <span className="text-stone-400 text-xs font-medium uppercase tracking-widest hidden md:inline"> | 4.9 Estrelas</span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">O Teu Espaço de Confiança em Sintra</span>
+              <span className="text-stone-400 text-xs font-medium uppercase tracking-widest hidden md:inline"> | Perfeccionismo & Arte</span>
             </div>
             
             <h2 className="font-serif text-5xl md:text-8xl font-bold mb-8 leading-[1.1] text-white tracking-tight">
-              Estilo y <span className="text-rose-600 italic">Maestría</span> <br />
-              en cada corte.
+              {BUSINESS_INFO.name} <br />
+              <span className="text-emerald-600 italic">{BUSINESS_INFO.subName}</span>
             </h2>
             
             <p className="text-stone-400 text-lg md:text-2xl max-w-2xl mx-auto mb-12 font-light">
-              Más de 30 años de experiencia ofreciendo un trato exquisito y resultados impecables para hombres y mujeres.
+              Elevamos o conceito de barbearia em Sintra. Profissionalismo, brio e um ambiente exclusivo para o homem moderno.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center px-4">
               <button 
                 onClick={() => setIsBookingOpen(true)}
-                className="bg-rose-600 hover:bg-rose-700 text-white px-10 py-5 rounded-full text-lg font-bold transition-all flex items-center justify-center gap-3 shadow-xl shadow-rose-900/20 group"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-full text-lg font-bold transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-900/20 group"
               >
-                Reservar Cita <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                Reservar Agora <ArrowRight className="group-hover:translate-x-1 transition-transform" />
               </button>
-              <a href="#servicos" className="bg-white/5 border border-white/10 text-white px-10 py-5 rounded-full text-lg font-bold hover:bg-white/10 transition-all shadow-sm">Ver Servicios</a>
+              <a href="#servicos" className="bg-white/5 border border-white/10 text-white px-10 py-5 rounded-full text-lg font-bold hover:bg-white/10 transition-all shadow-sm">Ver Serviços</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* HIGHLIGHTS / DIFERENCIALES */}
+      {/* HIGHLIGHTS */}
       <section className="py-16 md:py-24 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             {[
-              { icon: ShieldCheck, title: "Trato Exquisito", text: "Profesionalidad y cercanía para que te sientas como en casa en cada visita." },
-              { icon: Users, title: "Unisex & Moderno", text: "Expertos en las últimas tendencias tanto para caballeros como para señoras." },
-              { icon: Sparkles, title: "Gran Experiencia", text: "Décadas de dedicación que avalan la qualidade de nuestro serviço en Badajoz." }
+              { icon: ShieldCheck, title: "Brio & Perfeição", text: "Cada corte é uma obra de arte executada com o máximo rigor e atenção ao detalhe." },
+              { icon: Users, title: "Atendimento Premium", text: "Um espaço pensado para o conforto do homem, onde a simpatia e o brio andam juntos." },
+              { icon: Sparkles, title: "Localização Central", text: "Situados no coração de Sintra, prontos para renovar o teu estilo com conveniência." }
             ].map((item, index) => (
               <div key={index} className="flex flex-col items-center text-center group">
-                <div className="w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center text-rose-600 mb-6 group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600 mb-6 group-hover:scale-110 transition-transform">
                   <item.icon size={28} />
                 </div>
                 <h3 className="text-xl font-bold font-serif text-stone-800 mb-3">{item.title}</h3>
@@ -252,21 +252,21 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* SERVIÇOS (DINÂMICOS) */}
+      {/* SERVIÇOS DINÂMICOS */}
       <section id="servicos" className="py-20 md:py-32 bg-stone-50">
         <div className="container mx-auto px-4 text-left">
           <div className="text-center mb-16">
-            <h4 className="text-rose-600 text-sm font-bold uppercase tracking-[0.4em] mb-4">Nuestra Especialidad</h4>
-            <h2 className="font-serif text-4xl md:text-6xl font-bold text-stone-900">Servicios Profesionales</h2>
+            <h4 className="text-emerald-600 text-sm font-bold uppercase tracking-[0.4em] mb-4">A Nossa Arte</h4>
+            <h2 className="font-serif text-4xl md:text-6xl font-bold text-stone-900">Serviços Exclusivos</h2>
           </div>
 
           {loadingServices ? (
             <div className="flex justify-center py-20">
-              <Loader2 className="animate-spin text-rose-600" size={40} />
+              <Loader2 className="animate-spin text-emerald-600" size={40} />
             </div>
           ) : dynamicServices.length === 0 ? (
             <div className="text-center text-stone-500 italic py-10">
-              Cargando nuestra carta de servicios...
+              Estamos a preparar a nossa carta de serviços...
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-x-16 gap-y-12 max-w-5xl mx-auto">
@@ -274,11 +274,11 @@ const App: React.FC = () => {
                 <div 
                   key={s.id} 
                   onClick={() => setIsBookingOpen(true)}
-                  className="group border-b border-stone-200 pb-8 hover:border-rose-300 transition-all cursor-pointer"
+                  className="group border-b border-stone-200 pb-8 hover:border-emerald-300 transition-all cursor-pointer"
                 >
                   <div className="flex justify-between items-end mb-4">
-                    <h3 className="text-2xl font-bold font-serif text-stone-800 group-hover:text-rose-700 transition-colors">{s.name}</h3>
-                    <span className="text-rose-600 font-bold">{s.price}</span>
+                    <h3 className="text-2xl font-bold font-serif text-stone-800 group-hover:text-emerald-700 transition-colors">{s.name}</h3>
+                    <span className="text-emerald-600 font-bold">{s.price}</span>
                   </div>
                   <p className="text-stone-500 text-sm italic">{s.description}</p>
                 </div>
@@ -293,68 +293,68 @@ const App: React.FC = () => {
         <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl aspect-[4/5] border-8 border-stone-100">
-                <img src={IMAGES.interior[1].url} alt="Elías León Peluquería" className="w-full h-full object-cover" />
+                <img src={GALLERY_IMAGES[4].url} alt={BUSINESS_INFO.name} className="w-full h-full object-cover" />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-stone-900 text-white p-8 rounded-3xl max-w-xs shadow-2xl z-20 hidden md:block">
-                <Quote className="text-rose-500 mb-4" size={32} />
-                <p className="font-medium italic text-lg leading-snug">"Un gran profesional y mejor persona. Volveré con toda seguridad."</p>
-                <p className="text-rose-500 text-xs mt-4 uppercase font-bold tracking-widest">Juan Carlos G.</p>
+                <Quote className="text-emerald-500 mb-4" size={32} />
+                <p className="font-medium italic text-lg leading-snug">"{REVIEWS[1].text}"</p>
+                <p className="text-emerald-500 text-xs mt-4 uppercase font-bold tracking-widest">{REVIEWS[1].author}</p>
               </div>
             </div>
             <div>
               <h2 className="font-serif text-4xl md:text-6xl font-bold mb-8 text-stone-900">
-                Elías León <br /><span className="text-rose-600 italic">Maestría y Dedicación</span>
+                {BUSINESS_INFO.name} <br /><span className="text-emerald-600 italic">Paixão pelo Detalhe</span>
               </h2>
               <div className="space-y-6 text-stone-600 font-light text-lg">
-                <p>Ubicada en el corazón de Badajoz, nuestra peluquería ha sido durante años el punto de encuentro para quienes buscan un servicio impecable.</p>
-                <p>Bajo la dirección de Elías, nos enfocamos en resaltar tu mejor versión combinando técnicas tradicionales con las tendencias más actuales.</p>
+                <p>No {BUSINESS_INFO.name}, acreditamos que a barba e o cabelo são a expressão da identidade de cada homem. O nosso espaço em Sintra foi criado para oferecer mais do que um corte: oferecemos brio e perfeccionismo.</p>
+                <p>Com uma equipa dedicada e focada nas tendências atuais, garantimos que cada cliente sai da nossa cadeira com a sua melhor versão reforçada.</p>
               </div>
             </div>
         </div>
       </section>
 
-      {/* GALERÍA */}
+      {/* GALERÍA ATUALIZADA */}
       <section className="py-20 md:py-24 bg-stone-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-             <h2 className="font-serif text-3xl md:text-5xl font-bold text-stone-900 mb-4 italic">Nuestro Portfolio</h2>
-             <p className="text-stone-500">Pasión por el detalle en cada estilo.</p>
+             <h2 className="font-serif text-3xl md:text-5xl font-bold text-stone-900 mb-4 italic">O Nosso Portfolio</h2>
+             <p className="text-stone-500">Trabalhos reais, brio constante.</p>
           </div>
           <div className="columns-2 md:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
-            {IMAGES.cortes.map((img) => (
-              <div key={img.id} className="rounded-2xl md:rounded-3xl overflow-hidden group break-inside-avoid">
+            {GALLERY_IMAGES.map((img) => (
+              <div key={img.id} className="rounded-2xl md:rounded-3xl overflow-hidden group break-inside-avoid shadow-sm">
                 <img src={img.url} alt={img.alt} loading="lazy" className="w-full grayscale hover:grayscale-0 transition-all duration-700 hover:scale-110 cursor-pointer" />
               </div>
             ))}
-            <div className="bg-rose-600 aspect-[3/4] rounded-2xl md:rounded-3xl flex flex-col items-center justify-center p-4 md:p-8 text-center group break-inside-avoid">
+            <div className="bg-emerald-600 aspect-[3/4] rounded-2xl md:rounded-3xl flex flex-col items-center justify-center p-4 md:p-8 text-center group break-inside-avoid shadow-lg">
               <Camera size={32} className="text-white mb-3 md:mb-4 group-hover:scale-125 transition-transform" />
-              <h4 className="text-white font-black text-lg md:text-xl leading-tight">Síguenos para ver más</h4>
-              <a href={BUSINESS_INFO.instagramUrl} target="_blank" rel="noreferrer" className="mt-4 md:mt-6 text-white text-sm md:text-base font-bold border-b-2 border-white pb-1">@peluqueriaelias</a>
+              <h4 className="text-white font-black text-lg md:text-xl leading-tight">Segue-nos no Instagram</h4>
+              <a href={BUSINESS_INFO.instagramUrl} target="_blank" rel="noreferrer" className="mt-4 md:mt-6 text-white text-sm md:text-base font-bold border-b-2 border-white pb-1">@labarbiere</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN DEL ESPACIO */}
+      {/* SECCIÓN DO ESPAÇO */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
              <div className="order-2 md:order-1 space-y-6 text-left">
-                <h3 className="font-serif text-3xl md:text-4xl text-stone-900 italic">Un Espacio para Ti</h3>
+                <h3 className="font-serif text-3xl md:text-4xl text-stone-900 italic">O Teu Momento</h3>
                 <p className="text-stone-600 leading-relaxed">
-                  Nuestro salón ha sido diseñado para ofrecerte el máximo confort. Un ambiente profesional y acogedor donde cada detalle conta para que tu experiencia sea perfecta.
+                  O nosso salão foi desenhado para proporcionar o máximo conforto. Um ambiente masculino, profissional e acolhedor onde cada detalhe conta para que a tua experiência seja memorável.
                 </p>
                 <div className="flex gap-4">
                    <div className="rounded-2xl overflow-hidden h-40 flex-1 border border-stone-100">
-                      <img src={IMAGES.interior[2].url} alt="Interior Elías" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                      <img src={GALLERY_IMAGES[5].url} alt="Espaço 1" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
                    </div>
                    <div className="rounded-2xl overflow-hidden h-40 flex-1 border border-stone-100">
-                      <img src={IMAGES.interior[3].url} alt="Detalles Elías" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                      <img src={GALLERY_IMAGES[6].url} alt="Espaço 2" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
                    </div>
                 </div>
              </div>
              <div className="order-1 md:order-2 h-80 md:h-96 rounded-[3rem] overflow-hidden shadow-xl border-8 border-stone-50">
-                <img src={IMAGES.interior[0].url} alt="Peluquería Elías" className="w-full h-full object-cover" />
+                <img src={GALLERY_IMAGES[7].url} alt="Interior Principal" className="w-full h-full object-cover" />
              </div>
           </div>
         </div>
@@ -364,33 +364,33 @@ const App: React.FC = () => {
       <section id="contacto" className="py-20 bg-stone-50 text-left">
         <div className="container mx-auto px-4 grid lg:grid-cols-12 gap-16">
           <div className="lg:col-span-5">
-            <h2 className="font-serif text-5xl font-bold mb-10 text-stone-900 italic">Contacto</h2>
+            <h2 className="font-serif text-5xl font-bold mb-10 text-stone-900 italic">Onde Estamos</h2>
             <div className="space-y-10">
               <div className="flex gap-6">
-                <div className="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-rose-600">
+                <div className="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-emerald-600">
                    <MapPin size={28} />
                 </div>
-                <div><h4 className="text-stone-900 font-bold text-lg">Dirección</h4><p className="text-stone-500">{BUSINESS_INFO.address}<br/>{BUSINESS_INFO.city}</p></div>
+                <div><h4 className="text-stone-900 font-bold text-lg">Morada</h4><p className="text-stone-500">{BUSINESS_INFO.address}<br/>{BUSINESS_INFO.city}</p></div>
               </div>
               <div className="flex gap-6">
-                <div className="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-rose-600">
+                <div className="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-emerald-600">
                    <Clock size={28} />
                 </div>
-                <div><h4 className="text-stone-900 font-bold text-lg">Horario</h4><p className="text-stone-500">{BUSINESS_INFO.openingHours}</p></div>
+                <div><h4 className="text-stone-900 font-bold text-lg">Horário</h4><p className="text-stone-500">{BUSINESS_INFO.openingHours}</p></div>
               </div>
               <div className="flex gap-6">
-                <div className="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-rose-600">
+                <div className="w-14 h-14 bg-white shadow-sm rounded-2xl flex items-center justify-center text-emerald-600">
                    <Phone size={28} />
                 </div>
-                <div><h4 className="text-stone-900 font-bold text-lg">Teléfono</h4><p className="text-stone-800 text-2xl font-bold">{BUSINESS_INFO.phone}</p></div>
+                <div><h4 className="text-stone-900 font-bold text-lg">Telemóvel</h4><p className="text-stone-800 text-2xl font-bold">{BUSINESS_INFO.phone}</p></div>
               </div>
             </div>
           </div>
           <div className="lg:col-span-7 h-[500px] rounded-[3rem] overflow-hidden border-8 border-white shadow-xl relative group">
             <a href={BUSINESS_INFO.googleMapsUrl} target="_blank" rel="noreferrer" className="block w-full h-full relative">
-              <img src={MAP_SOURCE} alt="Mapa Badajoz" className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 transition-all" />
+              <img src={MAP_SOURCE} alt="Mapa Sintra" className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 transition-all" />
               <div className="absolute inset-0 flex items-center justify-center bg-stone-900/10">
-                <div className="bg-rose-600 text-white px-8 py-4 rounded-full font-bold shadow-xl">Abrir en Google Maps</div>
+                <div className="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold shadow-xl">Abrir Google Maps</div>
               </div>
             </a>
           </div>
@@ -400,13 +400,13 @@ const App: React.FC = () => {
       <footer className="py-20 bg-stone-900 text-white text-center">
         <div className="flex flex-col items-center gap-6">
           <div className="flex items-center gap-3">
-             <Scissors className="text-rose-500" size={32} />
+             <Scissors className="text-emerald-500" size={32} />
              <div className="text-left">
-                <h1 className="font-serif text-2xl font-bold leading-none uppercase">Elías</h1>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-rose-500 font-bold">Peluquería Unisex</p>
+                <h1 className="font-serif text-2xl font-bold leading-none uppercase">{BUSINESS_INFO.name}</h1>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-emerald-500 font-bold">{BUSINESS_INFO.subName}</p>
              </div>
           </div>
-          <p className="text-stone-400 text-xs uppercase tracking-widest">© 2026 Peluquería Elías León - Badajoz, España</p>
+          <p className="text-stone-400 text-xs uppercase tracking-widest">© 2026 {BUSINESS_INFO.name} - Sintra, Portugal</p>
         </div>
       </footer>
     </div>
@@ -417,128 +417,512 @@ export default App;
 
 
 ==================================================
+ARQUIVO: src\components\AdminBookingModal.tsx
+==================================================
+
+import React, { useState, useEffect } from 'react';
+import { 
+  X, 
+  Calendar, 
+  Clock, 
+  User, 
+  Phone, 
+  Scissors, 
+  Loader2, 
+  Save, 
+  Trash2, 
+  Plus // Ícone que estava faltando
+} from 'lucide-react';
+import { db } from '../firebase';
+import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { CLIENT_ID } from '../constants';
+import { Service, Appointment } from '../types';
+
+interface AdminBookingModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  services: Service[];
+  initialData?: Appointment | null;
+}
+
+const AdminBookingModal: React.FC<AdminBookingModalProps> = ({ isOpen, onClose, services, initialData }) => {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    clientName: '',
+    clientPhone: '',
+    serviceId: '',
+    date: new Date().toISOString().split('T')[0],
+    startTime: '11:00'
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        clientName: initialData.clientName,
+        clientPhone: initialData.clientPhone,
+        serviceId: initialData.serviceId,
+        date: initialData.date,
+        startTime: initialData.startTime
+      });
+    } else {
+      setFormData({
+        clientName: '',
+        clientPhone: '',
+        serviceId: '',
+        date: new Date().toISOString().split('T')[0],
+        startTime: '11:00'
+      });
+    }
+  }, [initialData, isOpen]);
+
+  if (!isOpen) return null;
+
+  const timeOptions = Array.from({ length: 53 }, (_, i) => {
+    const totalMinutes = 8 * 60 + i * 15;
+    const h = Math.floor(totalMinutes / 60);
+    const m = totalMinutes % 60;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  });
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const selectedService = services.find(s => s.id === formData.serviceId);
+    if (!selectedService) return;
+
+    try {
+      const [h, m] = formData.startTime.split(':').map(Number);
+      const startInMinutes = h * 60 + m;
+      const endInMinutes = startInMinutes + selectedService.duration;
+      const endTime = `${Math.floor(endInMinutes / 60).toString().padStart(2, '0')}:${(endInMinutes % 60).toString().padStart(2, '0')}`;
+
+      const appointmentData = {
+        clientName: formData.clientName,
+        clientPhone: formData.clientPhone,
+        serviceId: selectedService.id,
+        serviceName: selectedService.name,
+        date: formData.date,
+        startTime: formData.startTime,
+        endTime: endTime,
+        updatedAt: serverTimestamp()
+      };
+
+      if (initialData?.id) {
+        const docRef = doc(db, "businesses", CLIENT_ID, "appointments", initialData.id);
+        await updateDoc(docRef, appointmentData);
+      } else {
+        await addDoc(collection(db, "businesses", CLIENT_ID, "appointments"), {
+          ...appointmentData,
+          createdAt: serverTimestamp()
+        });
+      }
+
+      onClose();
+    } catch (error) {
+      console.error("Erro ao salvar:", error);
+      alert("Erro ao processar a operação.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!initialData?.id) return;
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este agendamiento?")) return;
+
+    setLoading(true);
+    try {
+      await deleteDoc(doc(db, "businesses", CLIENT_ID, "appointments", initialData.id));
+      onClose();
+    } catch (error) {
+      console.error("Erro ao deletar:", error);
+      alert("Erro ao eliminar.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+
+      <div className="relative bg-stone-900 border border-white/10 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+        
+        {/* Header */}
+        <div className="p-6 border-b border-white/5 bg-stone-900/50 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 ${initialData ? 'bg-amber-500' : 'bg-rose-600'} rounded-xl flex items-center justify-center text-white transition-colors`}>
+              {initialData ? <Calendar size={20} /> : <Plus size={20} />}
+            </div>
+            <div>
+              <h2 className="text-white font-bold text-lg">
+                {initialData ? 'Detalles de la Cita' : 'Nueva Marcação Manual'}
+              </h2>
+              <p className="text-rose-500 text-[10px] font-black uppercase tracking-widest">
+                {initialData ? 'Editar Agendamiento' : 'Painel de Gestão'}
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-stone-500 transition-colors">
+            <X size={24} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSave} className="p-8 space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-stone-500 uppercase ml-1 flex items-center gap-2">
+                <User size={12} /> Cliente
+              </label>
+              <input 
+                required
+                type="text"
+                className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500/50 transition-all"
+                value={formData.clientName}
+                onChange={e => setFormData({...formData, clientName: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-stone-500 uppercase ml-1 flex items-center gap-2">
+                <Phone size={12} /> Telemóvel
+              </label>
+              <input 
+                required
+                type="tel"
+                className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500/50 transition-all"
+                value={formData.clientPhone}
+                onChange={e => setFormData({...formData, clientPhone: e.target.value})}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-stone-500 uppercase ml-1 flex items-center gap-2">
+              <Scissors size={12} /> Serviço
+            </label>
+            <select 
+              required
+              className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500/50 transition-all appearance-none"
+              value={formData.serviceId}
+              onChange={e => setFormData({...formData, serviceId: e.target.value})}
+            >
+              <option value="">Selecione um serviço...</option>
+              {services.map(s => (
+                <option key={s.id} value={s.id}>{s.name} ({s.duration} min - {s.price})</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-stone-500 uppercase ml-1 flex items-center gap-2">
+                <Calendar size={12} /> Data
+              </label>
+              <input 
+                required
+                type="date"
+                className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500/50 transition-all color-scheme-dark"
+                value={formData.date}
+                onChange={e => setFormData({...formData, date: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-stone-500 uppercase ml-1 flex items-center gap-2">
+                <Clock size={12} /> Início
+              </label>
+              <select 
+                required
+                className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500/50 transition-all appearance-none"
+                value={formData.startTime}
+                onChange={e => setFormData({...formData, startTime: e.target.value})}
+              >
+                {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            {initialData && (
+              <button 
+                type="button"
+                onClick={handleDelete}
+                disabled={loading}
+                className="flex-none p-5 bg-stone-800 hover:bg-red-900/40 text-red-500 rounded-2xl transition-all active:scale-95"
+                title="Eliminar agendamiento"
+              >
+                <Trash2 size={20} />
+              </button>
+            )}
+            
+            <button 
+              type="submit"
+              disabled={loading}
+              className={`flex-1 py-5 ${initialData ? 'bg-amber-600 hover:bg-amber-700' : 'bg-rose-600 hover:bg-rose-700'} text-white font-black rounded-2xl shadow-xl transition-all flex justify-center items-center gap-2 active:scale-[0.98]`}
+            >
+              {loading ? <Loader2 className="animate-spin" /> : (
+                <><Save size={20} /> {initialData ? 'Actualizar Cita' : 'Confirmar Agendamento'}</>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default AdminBookingModal;
+
+
+==================================================
 ARQUIVO: src\components\AdminCalendar.tsx
 ==================================================
 
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Clock, User, Phone } from 'lucide-react';
-import { Appointment } from '../types';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Clock, 
+  User, 
+  Scissors, 
+  Lock, 
+  Calendar as CalendarIcon 
+} from 'lucide-react';
+import { Appointment, TimeBlock } from '../types';
 
 interface AdminCalendarProps {
   appointments: Appointment[];
+  timeBlocks: TimeBlock[];
+  onEditAppointment: (appt: Appointment) => void;
 }
 
-const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<string | null>(
-    new Date().toISOString().split('T')[0]
-  );
+const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks, onEditAppointment }) => {
+  const [viewDate, setViewDate] = useState(new Date());
 
-  // --- LÓGICA DO CALENDÁRIO ---
-  const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-  const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+  // --- CONFIGURAÇÃO DA GRADE ---
+  const HOUR_HEIGHT = 80; // pixels por hora
+  const START_HOUR = 8;   // 08:00
+  const END_HOUR = 21;    // 21:00
+  const hours = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => START_HOUR + i);
 
-  const handlePrevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
-  const handleNextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+  // --- LÓGICA DE DATAS (SEMANA) ---
+  const getWeekDays = (date: Date) => {
+    const start = new Date(date);
+    const day = start.getDay();
+    const diff = start.getDate() - day + (day === 0 ? -6 : 1); // Segunda como primeiro dia
+    start.setDate(diff);
+    
+    return Array.from({ length: 6 }, (_, i) => { // Segunda a Sábado
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      return d;
+    });
+  };
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const totalDays = daysInMonth(year, month);
-  const startDay = firstDayOfMonth(year, month);
+  const weekDays = getWeekDays(viewDate);
+  const weekRangeLabel = `${weekDays[0].toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })} - ${weekDays[5].toLocaleDateString('pt-PT', { day: '2-digit', month: 'short', year: 'numeric' })}`;
 
-  // Ajuste para começar na Segunda-feira (0: Dom, 1: Seg...)
-  const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
+  const changeWeek = (offset: number) => {
+    const next = new Date(viewDate);
+    next.setDate(viewDate.getDate() + (offset * 7));
+    setViewDate(next);
+  };
 
-  const monthName = currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
-  const weekDays = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+  // --- AUXILIARES DE POSICIONAMENTO ---
+  const getTimeData = (timeStr: string) => {
+    const [h, m] = timeStr.split(':').map(Number);
+    const totalMinutes = (h * 60 + m) - (START_HOUR * 60);
+    return {
+      top: (totalMinutes / 60) * HOUR_HEIGHT,
+      minutes: totalMinutes
+    };
+  };
 
-  // Filtrar agendamentos do dia selecionado
-  const appointmentsForSelectedDay = appointments.filter(app => app.date === selectedDate);
+  const calculateHeight = (start: string, end: string) => {
+    const [sh, sm] = start.split(':').map(Number);
+    const [eh, em] = end.split(':').map(Number);
+    const duration = (eh * 60 + em) - (sh * 60 + sm);
+    return (duration / 60) * HOUR_HEIGHT;
+  };
+
+  // --- VERIFICAÇÃO DE BLOQUEIOS RECORRENTES ---
+  const isBlockActiveOnDay = (block: TimeBlock, targetDate: Date) => {
+    const blockDate = new Date(block.date);
+    blockDate.setHours(0,0,0,0);
+    const target = new Date(targetDate);
+    target.setHours(0,0,0,0);
+
+    if (target.getTime() === blockDate.getTime()) return true;
+    if (!block.isRecurring || target < blockDate) return false;
+
+    const diffDays = Math.round((target.getTime() - blockDate.getTime()) / (1000 * 60 * 60 * 24));
+    const repeats = block.repeatCount || 0;
+
+    switch (block.recurringType) {
+      case 'daily':
+        return diffDays <= repeats;
+      case 'weekly':
+        return diffDays % 7 === 0 && diffDays / 7 <= repeats;
+      case 'monthly':
+        return target.getDate() === blockDate.getDate() && 
+               (target.getMonth() - blockDate.getMonth() + (12 * (target.getFullYear() - blockDate.getFullYear()))) <= repeats;
+      default:
+        return false;
+    }
+  };
 
   return (
-    <div className="grid lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
+    <div className="flex flex-col h-full animate-in fade-in duration-700">
       
-      {/* COLUNA DO CALENDÁRIO (GRELHA) */}
-      <div className="lg:col-span-2 bg-stone-900 border border-white/5 p-6 rounded-[2.5rem] shadow-xl">
-        <div className="flex justify-between items-center mb-8 px-2">
-          <h3 className="text-xl font-serif font-bold text-white capitalize">{monthName}</h3>
-          <div className="flex gap-2">
-            <button onClick={handlePrevMonth} className="p-2 hover:bg-white/5 rounded-full text-stone-400 hover:text-white transition-all"><ChevronLeft size={20}/></button>
-            <button onClick={handleNextMonth} className="p-2 hover:bg-white/5 rounded-full text-stone-400 hover:text-white transition-all"><ChevronRight size={20}/></button>
+      {/* CABEÇALHO DA AGENDA */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        <div className="flex items-center gap-4">
+          <div className="bg-emerald-600 p-2 rounded-xl shadow-lg shadow-emerald-900/20">
+            <CalendarIcon className="text-white" size={20} />
+          </div>
+          <div>
+            <h3 className="text-white font-bold text-lg leading-tight">Vista Semanal</h3>
+            <p className="text-emerald-500 text-[10px] font-black uppercase tracking-widest">{weekRangeLabel}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-7 mb-4">
-          {weekDays.map(day => (
-            <div key={day} className="text-center text-[10px] font-black text-stone-600 uppercase tracking-widest py-2">{day}</div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-7 gap-1">
-          {/* Espaços vazios do início do mês */}
-          {[...Array(adjustedStartDay)].map((_, i) => (
-            <div key={`empty-${i}`} className="aspect-square"></div>
-          ))}
-
-          {/* Dias do mês */}
-          {[...Array(totalDays)].map((_, i) => {
-            const dayNum = i + 1;
-            const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${dayNum.toString().padStart(2, '0')}`;
-            const hasAppointments = appointments.some(app => app.date === dateStr);
-            const isSelected = selectedDate === dateStr;
-            const isToday = new Date().toISOString().split('T')[0] === dateStr;
-
-            return (
-              <button
-                key={dayNum}
-                onClick={() => setSelectedDate(dateStr)}
-                className={`aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative group
-                  ${isSelected ? 'bg-rose-600 text-white shadow-lg' : 'hover:bg-white/5 text-stone-400'}
-                  ${isToday && !isSelected ? 'border border-rose-500/50' : ''}
-                `}
-              >
-                <span className={`text-sm font-bold ${isSelected ? 'text-white' : ''}`}>{dayNum}</span>
-                {hasAppointments && (
-                  <div className={`w-1 h-1 rounded-full mt-1 ${isSelected ? 'bg-white' : 'bg-rose-500'}`}></div>
-                )}
-              </button>
-            );
-          })}
+        <div className="flex items-center bg-stone-900 border border-white/5 p-1 rounded-2xl">
+          <button onClick={() => changeWeek(-1)} className="p-2 hover:bg-stone-800 rounded-xl text-stone-400 hover:text-white transition-all">
+            <ChevronLeft size={20}/>
+          </button>
+          <button 
+            onClick={() => setViewDate(new Date())} 
+            className="px-4 py-2 text-xs font-bold text-stone-300 hover:text-emerald-500 transition-colors"
+          >
+            HOJE
+          </button>
+          <button onClick={() => changeWeek(1)} className="p-2 hover:bg-stone-800 rounded-xl text-stone-400 hover:text-white transition-all">
+            <ChevronRight size={20}/>
+          </button>
         </div>
       </div>
 
-      {/* COLUNA DE DETALHES DO DIA */}
-      <div className="bg-stone-900 border border-white/5 p-6 rounded-[2.5rem] flex flex-col shadow-xl">
-        <div className="mb-6">
-          <h4 className="text-white font-bold text-lg">
-            {selectedDate ? new Date(selectedDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Selecciona un día'}
-          </h4>
-          <p className="text-rose-500 text-[10px] uppercase font-bold tracking-widest mt-1">Citas del día</p>
-        </div>
+      {/* ÁREA DA GRADE */}
+      <div className="flex-1 overflow-x-auto rounded-[2rem] border border-white/5 bg-stone-950/50 shadow-2xl">
+        <div className="min-w-[800px] relative">
+          
+          {/* DIAS DA SEMANA */}
+          <div className="sticky top-0 z-30 grid grid-cols-[80px_1fr_1fr_1fr_1fr_1fr_1fr] bg-stone-900 border-b border-white/5">
+            <div className="p-4 border-r border-white/5"></div>
+            {weekDays.map((day, i) => {
+              const isToday = day.toDateString() === new Date().toDateString();
+              return (
+                <div key={i} className={`p-3 text-center border-r border-white/5 last:border-0 ${isToday ? 'bg-emerald-600/5' : ''}`}>
+                  <p className="text-[10px] font-black text-stone-500 uppercase tracking-tighter">
+                    {day.toLocaleDateString('pt-PT', { weekday: 'short' })}
+                  </p>
+                  <p className={`text-lg font-serif font-bold ${isToday ? 'text-emerald-500' : 'text-white'}`}>
+                    {day.getDate()}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
 
-        <div className="flex-1 space-y-4 overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-stone-800">
-          {appointmentsForSelectedDay.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-stone-600 text-sm italic text-center px-4 py-20">
-              No hay citas para este día.
+          {/* CORPO DA GRADE */}
+          <div className="relative grid grid-cols-[80px_1fr_1fr_1fr_1fr_1fr_1fr]">
+            
+            {/* HORAS LATERAIS */}
+            <div className="bg-stone-900/30 border-r border-white/5">
+              {hours.map(hour => (
+                <div 
+                  key={hour} 
+                  className="text-right pr-4 text-[10px] font-bold text-stone-600 border-b border-white/5"
+                  style={{ height: `${HOUR_HEIGHT}px`, paddingTop: '4px' }}
+                >
+                  {hour.toString().padStart(2, '0')}:00
+                </div>
+              ))}
             </div>
-          ) : (
-            appointmentsForSelectedDay.map(app => (
-              <div key={app.id} className="bg-stone-950 border border-white/5 p-4 rounded-2xl space-y-3">
-                <div className="flex justify-between items-start">
-                  <span className="bg-rose-600/10 text-rose-500 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">{app.serviceName}</span>
-                  <div className="flex items-center gap-1 text-stone-400 text-xs font-bold">
-                    <Clock size={12} className="text-rose-500"/> {app.startTime}
-                  </div>
+
+            {/* COLUNAS DOS DIAS */}
+            {weekDays.map((day, colIdx) => {
+              const dateStr = day.toISOString().split('T')[0];
+              const dayAppointments = appointments.filter(a => a.date === dateStr);
+              const dayBlocks = timeBlocks.filter(b => isBlockActiveOnDay(b, day));
+
+              return (
+                <div key={colIdx} className="relative border-r border-white/5 last:border-0 pointer-events-auto">
+                  {/* Linhas de fundo */}
+                  {hours.map(h => (
+                    <div key={h} className="border-b border-white/[0.02]" style={{ height: `${HOUR_HEIGHT}px` }} />
+                  ))}
+
+                  {/* BLOQUEIOS (BACKGROUND) */}
+                  {dayBlocks.map(block => {
+                    const { top } = getTimeData(block.startTime);
+                    const height = calculateHeight(block.startTime, block.endTime);
+                    return (
+                      <div
+                        key={block.id}
+                        className="absolute left-0 right-0 z-10 bg-stone-800/40 backdrop-blur-[1px] border-y border-white/5 flex items-center justify-center overflow-hidden pointer-events-none"
+                        style={{ top: `${top}px`, height: `${height}px` }}
+                      >
+                        <div className="flex items-center gap-1.5 opacity-20 rotate-[-5deg]">
+                          <Lock size={12} className="text-white" />
+                          <span className="text-[9px] font-black text-white uppercase tracking-tighter">Bloqueado</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* AGENDAMENTOS (FOREGROUND - CLICÁVEIS) */}
+                  {dayAppointments.map(app => {
+                    const { top } = getTimeData(app.startTime);
+                    const height = calculateHeight(app.startTime, app.endTime);
+                    return (
+                      <div
+                        key={app.id}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation(); 
+                          onEditAppointment(app);
+                        }}
+                        className="absolute left-1.5 right-1.5 z-40 rounded-xl bg-stone-900 border-l-4 border-emerald-600 p-2 shadow-2xl ring-1 ring-white/5 hover:ring-emerald-500/50 hover:bg-stone-800 hover:scale-[1.02] hover:z-50 transition-all cursor-pointer group/card select-none"
+                        style={{ top: `${top}px`, height: `${height}px` }}
+                      >
+                        <div className="flex flex-col h-full overflow-hidden pointer-events-none">
+                          <div className="flex justify-between items-start mb-1">
+                            <span className="text-[9px] font-black text-emerald-500 uppercase leading-none truncate pr-1">
+                              {app.startTime}
+                            </span>
+                            <Scissors size={10} className="text-stone-700 group-hover/card:text-emerald-500 transition-colors shrink-0" />
+                          </div>
+                          <p className="text-xs font-bold text-white truncate leading-tight group-hover/card:text-emerald-100 transition-colors">
+                            {app.clientName}
+                          </p>
+                          {height > 45 && (
+                            <p className="text-[10px] text-stone-500 font-medium truncate mt-0.5">
+                              {app.serviceName}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className="flex items-center gap-2 text-white font-bold text-sm">
-                  <User size={14} className="text-stone-500"/> {app.clientName}
-                </div>
-                <a href={`tel:${app.clientPhone}`} className="flex items-center gap-2 text-stone-500 text-xs hover:text-rose-500 transition-colors">
-                  <Phone size={12}/> {app.clientPhone}
-                </a>
-              </div>
-            ))
-          )}
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* LEGENDA */}
+      <div className="mt-4 flex gap-4 px-2">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-600 shadow-sm shadow-emerald-900/40"></div>
+          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Marcações (Clica para editar)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-stone-800 border border-white/5"></div>
+          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Bloqueios</span>
         </div>
       </div>
     </div>
@@ -565,16 +949,19 @@ import {
 } from 'lucide-react';
 import { Appointment, Service, WorkConfig, TimeBlock } from '../types';
 import AdminCalendar from './AdminCalendar';
-// Importamos o CLIENT_ID para separar as bases de dados
+import AdminBookingModal from './AdminBookingModal';
 import { BUSINESS_INFO, CLIENT_ID } from '../constants';
+
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
-  // --- NAVEGAÇÃO ---
+  // --- NAVEGAÇÃO E MODAIS ---
   const [activeTab, setActiveTab] = useState<'appointments' | 'services' | 'settings'>('appointments');
-  const [appointmentsMode, setAppointmentsMode] = useState<'list' | 'calendar'>('calendar');
+  const [appointmentsMode, setAppointmentsMode] = useState<'calendar' | 'list'>('calendar');
+  const [isAdminBookingOpen, setIsAdminBookingOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
   // --- DADOS ---
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -587,16 +974,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [loadingApp, setLoadingApp] = useState(true);
   const [loadingServ, setLoadingServ] = useState(true);
 
-  // --- FORMULÁRIOS ---
+  // --- FORMULÁRIOS DE CRIAÇÃO RÁPIDA ---
   const [newService, setNewService] = useState({ name: '', description: '', price: '', duration: 30 });
   const [newBlock, setNewBlock] = useState<Partial<TimeBlock>>({
     title: '', date: new Date().toISOString().split('T')[0], startTime: '11:00', endTime: '12:00', 
     isRecurring: false, recurringType: 'weekly', repeatCount: 1
   });
 
-  // Auxiliar: Gera lista de horários de 30 em 30 min
   const hoursOptions = Array.from({ length: 29 }, (_, i) => {
-    const h = Math.floor(i / 2) + 8; // Inicia às 08:00
+    const h = Math.floor(i / 2) + 8;
     const m = i % 2 === 0 ? '00' : '30';
     return `${h.toString().padStart(2, '0')}:${m}`;
   });
@@ -604,7 +990,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
     
-    // 1. ESCUTA AGENDAMENTOS (Multi-tenant: pasta do cliente)
     const qApp = query(
       collection(db, "businesses", CLIENT_ID, "appointments"), 
       where("date", ">=", today), 
@@ -615,19 +1000,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       setLoadingApp(false);
     });
 
-    // 2. ESCUTA SERVIÇOS
     const qServ = query(collection(db, "businesses", CLIENT_ID, "services"), orderBy("name", "asc"));
     const unsubServ = onSnapshot(qServ, (snap) => {
       setDbServices(snap.docs.map(d => ({ id: d.id, ...d.data() } as Service)));
       setLoadingServ(false);
     });
 
-    // 3. ESCUTA CONFIGURAÇÃO JORNADA
     const unsubConfig = onSnapshot(doc(db, "businesses", CLIENT_ID, "config", "work-schedule"), (snap) => {
       if (snap.exists()) setWorkConfig(snap.data() as WorkConfig);
     });
 
-    // 4. ESCUTA BLOQUEIOS DE AGENDA
     const unsubBlocks = onSnapshot(collection(db, "businesses", CLIENT_ID, "timeBlocks"), (snap) => {
       setTimeBlocks(snap.docs.map(d => ({ id: d.id, ...d.data() } as TimeBlock)));
     });
@@ -635,26 +1017,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     return () => { unsubApp(); unsubServ(); unsubConfig(); unsubBlocks(); };
   }, []);
 
-  // --- AÇÕES ---
+  // --- HANDLERS ---
+  const handleOpenNewBooking = () => {
+    setSelectedAppointment(null);
+    setIsAdminBookingOpen(true);
+  };
+
+  const handleEditAppointment = (appt: Appointment) => {
+    setSelectedAppointment(appt);
+    setIsAdminBookingOpen(true);
+  };
 
   const handleAddService = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newService.name || !newService.price) return;
     try {
-      await addDoc(collection(db, "businesses", CLIENT_ID, "services"), { 
-        ...newService, 
-        createdAt: serverTimestamp() 
-      });
+      await addDoc(collection(db, "businesses", CLIENT_ID, "services"), { ...newService, createdAt: serverTimestamp() });
       setNewService({ name: '', description: '', price: '', duration: 30 });
-      alert("Servicio creado.");
-    } catch (error) { alert("Error al crear servicio."); }
+      alert("Serviço criado com sucesso.");
+    } catch (error) { alert("Erro ao criar serviço."); }
   };
 
   const handleSaveConfig = async () => {
     try {
       await setDoc(doc(db, "businesses", CLIENT_ID, "config", "work-schedule"), workConfig);
-      alert("Jornada actualizada.");
-    } catch (e) { alert("Error al guardar."); }
+      alert("Configuração guardada.");
+    } catch (e) { alert("Erro ao guardar."); }
   };
 
   const handleAddTimeBlock = async (e: React.FormEvent) => {
@@ -663,129 +1051,167 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     try {
       await addDoc(collection(db, "businesses", CLIENT_ID, "timeBlocks"), newBlock);
       setNewBlock({ title: '', date: new Date().toISOString().split('T')[0], startTime: '11:00', endTime: '12:00', isRecurring: false, recurringType: 'weekly', repeatCount: 1 });
-      alert("Bloqueo aplicado.");
-    } catch (e) { alert("Error."); }
+      alert("Bloqueio aplicado.");
+    } catch (e) { alert("Erro ao aplicar bloqueio."); }
   };
 
-  const handleDeleteApp = async (id: string) => {
-    if (window.confirm("¿Eliminar cita?")) await deleteDoc(doc(db, "businesses", CLIENT_ID, "appointments", id));
-  };
-
-  const handleDeleteService = async (id: string) => {
-    if (window.confirm("¿Eliminar servicio?")) await deleteDoc(doc(db, "businesses", CLIENT_ID, "services", id));
+  const handleDeleteApp = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (window.confirm("Eliminar esta marcação?")) await deleteDoc(doc(db, "businesses", CLIENT_ID, "appointments", id));
   };
 
   const handleSignOut = async () => { await auth.signOut(); onLogout(); };
 
   return (
-    <div className="fixed inset-0 z-[120] bg-stone-950 flex flex-col text-left overflow-hidden">
-      {/* HEADER DINÂMICO */}
-      <header className="bg-stone-900 border-b border-rose-900/20 p-6 z-30 shadow-2xl">
+    <div className="fixed inset-0 z-[120] bg-stone-950 flex flex-col text-left overflow-hidden font-sans">
+      {/* HEADER DINÂMICO EMERALD */}
+      <header className="bg-stone-900 border-b border-emerald-900/20 p-6 z-30 shadow-2xl">
         <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-rose-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
+            <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-900/20">
               <Scissors size={24} />
             </div>
             <div>
-              <h2 className="text-xl font-serif font-bold text-white uppercase tracking-tight">Gestión {BUSINESS_INFO.name}</h2>
-              <p className="text-rose-500 text-[10px] uppercase font-black tracking-widest">Client ID: {CLIENT_ID}</p>
+              <h2 className="text-xl font-serif font-bold text-white uppercase tracking-tight">Gestão {BUSINESS_INFO.name}</h2>
+              <p className="text-emerald-500 text-[10px] font-black uppercase tracking-widest leading-none mt-1">Painel Administrativo</p>
             </div>
           </div>
 
           <nav className="flex bg-stone-800/40 p-1 rounded-2xl border border-white/5">
-            <button onClick={() => setActiveTab('appointments')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'appointments' ? 'bg-rose-600 text-white shadow-lg' : 'text-stone-400'}`}>
-              <LayoutDashboard size={16} /> CITAS
+            <button onClick={() => setActiveTab('appointments')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'appointments' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
+              <LayoutDashboard size={16} /> MARCAÇÕES
             </button>
-            <button onClick={() => setActiveTab('services')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'services' ? 'bg-rose-600 text-white shadow-lg' : 'text-stone-400'}`}>
-              <Briefcase size={16} /> SERVICIOS
+            <button onClick={() => setActiveTab('services')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'services' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
+              <Briefcase size={16} /> SERVIÇOS
             </button>
-            <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'settings' ? 'bg-rose-600 text-white shadow-lg' : 'text-stone-400'}`}>
+            <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'settings' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
               <Settings size={16} /> CONFIG
             </button>
           </nav>
           
           <button onClick={handleSignOut} className="text-stone-500 hover:text-red-500 transition-colors flex items-center gap-2 font-bold text-sm">
-            <LogOut size={18} /> <span className="hidden sm:inline">Cerrar Sesión</span>
+            <LogOut size={18} /> <span className="hidden sm:inline">Sair</span>
           </button>
         </div>
       </header>
 
       {/* ÁREA PRINCIPAL */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-stone-950">
         <div className="container mx-auto max-w-6xl">
 
-          {/* CITAS (Com Toggles de Visualização) */}
+          {/* ABA: AGENDAMENTOS */}
           {activeTab === 'appointments' && (
             <div className="animate-in fade-in duration-500 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="text-white font-bold flex items-center gap-3"><CalendarIcon className="text-rose-500"/> Agenda de Reservas</h3>
-                <div className="flex bg-stone-900 border border-white/5 p-1 rounded-xl">
-                  <button onClick={() => setAppointmentsMode('calendar')} className={`p-2 rounded-lg transition-all ${appointmentsMode === 'calendar' ? 'bg-stone-800 text-rose-500' : 'text-stone-600 hover:text-stone-400'}`}><CalendarDays size={20}/></button>
-                  <button onClick={() => setAppointmentsMode('list')} className={`p-2 rounded-lg transition-all ${appointmentsMode === 'list' ? 'bg-stone-800 text-rose-500' : 'text-stone-600 hover:text-stone-400'}`}><LayoutList size={20}/></button>
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <h3 className="text-white font-bold flex items-center gap-3 text-lg">
+                  <CalendarIcon className="text-emerald-500" size={24}/> 
+                  Agenda de Reservas
+                </h3>
+                
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                  <button 
+                    onClick={handleOpenNewBooking}
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-black transition-all shadow-lg shadow-emerald-900/20 active:scale-95"
+                  >
+                    <Plus size={16} /> NOVA MARCAÇÃO
+                  </button>
+
+                  <div className="flex bg-stone-900 border border-white/5 p-1 rounded-xl">
+                    <button onClick={() => setAppointmentsMode('calendar')} className={`p-2 rounded-lg transition-all ${appointmentsMode === 'calendar' ? 'bg-stone-800 text-emerald-500' : 'text-stone-600 hover:text-stone-400'}`}>
+                      <CalendarDays size={20}/>
+                    </button>
+                    <button onClick={() => setAppointmentsMode('list')} className={`p-2 rounded-lg transition-all ${appointmentsMode === 'list' ? 'bg-stone-800 text-emerald-500' : 'text-stone-600 hover:text-stone-400'}`}>
+                      <LayoutList size={20}/>
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {loadingApp ? <div className="flex justify-center py-20"><Loader2 className="animate-spin text-rose-500" size={40} /></div> : (
+              {loadingApp ? (
+                <div className="flex justify-center py-20"><Loader2 className="animate-spin text-emerald-500" size={40} /></div>
+              ) : (
                 appointmentsMode === 'calendar' ? (
-                  <AdminCalendar appointments={appointments} timeBlocks={timeBlocks} />
+                  <AdminCalendar 
+                    appointments={appointments} 
+                    timeBlocks={timeBlocks} 
+                    onEditAppointment={handleEditAppointment} 
+                  />
                 ) : (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {appointments.length === 0 ? <p className="col-span-3 text-center text-stone-600 italic py-10">No hay citas registradas.</p> : appointments.map(app => (
-                      <div key={app.id} className="bg-stone-900 border border-white/5 p-6 rounded-[2.5rem] relative group shadow-lg">
-                        <span className="bg-rose-600/10 text-rose-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{app.serviceName}</span>
-                        <div className="mt-4 text-white font-bold text-lg">{app.clientName}</div>
-                        <div className="text-stone-400 text-sm mt-2 font-medium">{app.date} • {app.startTime} - {app.endTime}</div>
-                        <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-2 text-rose-400 font-bold text-sm"><Phone size={14}/> {app.clientPhone}</div>
-                        <button onClick={() => handleDeleteApp(app.id!)} className="absolute top-6 right-6 text-stone-700 hover:text-red-500 transition-colors"><Trash2 size={18}/></button>
+                    {appointments.length === 0 ? (
+                      <div className="col-span-full bg-stone-900/50 border border-dashed border-white/10 rounded-[2.5rem] py-20 text-center">
+                        <p className="text-stone-600 italic">Sem marcações registadas.</p>
                       </div>
-                    ))}
+                    ) : (
+                      appointments.map(app => (
+                        <div 
+                          key={app.id} 
+                          onClick={() => handleEditAppointment(app)}
+                          className="bg-stone-900 border border-white/5 p-6 rounded-[2.5rem] relative group shadow-lg hover:border-emerald-500/30 transition-all cursor-pointer"
+                        >
+                          <span className="bg-emerald-600/10 text-emerald-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{app.serviceName}</span>
+                          <div className="mt-4 text-white font-bold text-lg leading-tight">{app.clientName}</div>
+                          <div className="text-stone-400 text-sm mt-2 font-medium">
+                            {new Date(app.date).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })} • {app.startTime} - {app.endTime}
+                          </div>
+                          <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                            <Phone size={14}/> {app.clientPhone}
+                          </div>
+                          <button 
+                            onClick={(e) => handleDeleteApp(e, app.id!)} 
+                            className="absolute top-6 right-6 text-stone-700 hover:text-red-500 transition-colors"
+                          >
+                            <Trash2 size={18}/>
+                          </button>
+                        </div>
+                      ))
+                    )}
                   </div>
                 )
               )}
             </div>
           )}
 
-          {/* SERVICIOS */}
+          {/* ABA: SERVIÇOS */}
           {activeTab === 'services' && (
              <div className="space-y-6 animate-in slide-in-from-bottom-4">
-                <form onSubmit={handleAddService} className="bg-stone-900 border border-rose-900/20 p-8 rounded-[3rem] shadow-2xl space-y-6">
-                  <h3 className="text-white font-bold flex items-center gap-2 text-lg"><Plus className="text-rose-500"/> Nuevo Servicio</h3>
+                <form onSubmit={handleAddService} className="bg-stone-900 border border-emerald-900/20 p-8 rounded-[3rem] shadow-2xl space-y-6">
+                  <h3 className="text-white font-bold flex items-center gap-2 text-lg"><Plus className="text-emerald-500"/> Novo Serviço</h3>
                   <div className="grid md:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                       <label className="text-[10px] uppercase font-black text-stone-500 ml-1">Nombre</label>
-                       <input required value={newService.name} onChange={e => setNewService({...newService, name: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500" />
+                       <label className="text-[10px] uppercase font-black text-stone-500 ml-1">Nome</label>
+                       <input required value={newService.name} onChange={e => setNewService({...newService, name: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-emerald-500" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] uppercase font-black text-stone-500 ml-1">Precio</label>
-                       <input required value={newService.price} onChange={e => setNewService({...newService, price: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500" placeholder="15€" />
+                       <label className="text-[10px] uppercase font-black text-stone-500 ml-1">Preço</label>
+                       <input required value={newService.price} onChange={e => setNewService({...newService, price: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-emerald-500" placeholder="15€" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] uppercase font-black text-stone-500 ml-1">Duración (Mins)</label>
-                       <input required type="number" value={newService.duration} onChange={e => setNewService({...newService, duration: parseInt(e.target.value)})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500" />
+                       <label className="text-[10px] uppercase font-black text-stone-500 ml-1">Duração (Mins)</label>
+                       <input required type="number" value={newService.duration} onChange={e => setNewService({...newService, duration: parseInt(e.target.value)})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-emerald-500" />
                     </div>
                   </div>
-                  <button type="submit" className="w-full py-5 bg-rose-600 text-white font-black rounded-2xl shadow-xl transition-all">Crear Servicio</button>
+                  <button type="submit" className="w-full py-5 bg-emerald-600 text-white font-black rounded-2xl shadow-xl transition-all">Criar Serviço</button>
                 </form>
                 <div className="grid gap-4">
-                   {loadingServ ? <Loader2 className="animate-spin text-rose-500 mx-auto"/> : dbServices.map(s => (
-                     <div key={s.id} className="bg-stone-900 border border-white/5 p-6 rounded-3xl flex justify-between items-center group transition-all">
+                   {loadingServ ? <Loader2 className="animate-spin text-emerald-500 mx-auto"/> : dbServices.map(s => (
+                     <div key={s.id} className="bg-stone-900 border border-white/5 p-6 rounded-3xl flex justify-between items-center group transition-all hover:border-emerald-500/20">
                         <div className="flex items-center gap-4">
-                           <div className="w-10 h-10 bg-stone-950 rounded-xl flex items-center justify-center text-rose-500"><Briefcase size={18}/></div>
+                           <div className="w-10 h-10 bg-stone-950 rounded-xl flex items-center justify-center text-emerald-500"><Briefcase size={18}/></div>
                            <div><h4 className="text-white font-bold">{s.name}</h4><p className="text-stone-500 text-xs">{s.duration} min • {s.price}</p></div>
                         </div>
-                        <button onClick={() => handleDeleteService(s.id!)} className="text-stone-700 hover:text-red-500 p-2"><Trash2 size={20}/></button>
+                        <button onClick={() => { if(window.confirm("Eliminar serviço?")) deleteDoc(doc(db, "businesses", CLIENT_ID, "services", s.id!)) }} className="text-stone-700 hover:text-red-500 p-2"><Trash2 size={20}/></button>
                      </div>
                    ))}
                 </div>
              </div>
           )}
 
-          {/* CONFIGURACIÓN */}
+          {/* ABA: CONFIGURAÇÃO */}
           {activeTab === 'settings' && (
             <div className="space-y-12 animate-in slide-in-from-bottom-4 pb-24">
-              {/* JORNADA */}
               <div className="bg-stone-900 border border-white/5 p-8 rounded-[3rem] shadow-2xl">
-                <h3 className="text-white font-bold mb-8 flex items-center gap-3"><Clock className="text-rose-500"/> Jornada Laboral</h3>
+                <h3 className="text-white font-bold mb-8 flex items-center gap-3"><Clock className="text-emerald-500"/> Jornada de Trabalho</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   {['startHour', 'endHour', 'breakStart', 'breakEnd'].map((key) => (
                     <div key={key}>
@@ -793,7 +1219,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                       <select 
                         value={(workConfig as any)[key]} 
                         onChange={e => setWorkConfig({...workConfig, [key]: e.target.value})}
-                        className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500 appearance-none font-bold"
+                        className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-emerald-500 appearance-none font-bold"
                       >
                         {hoursOptions.map(h => <option key={h} value={h}>{h}</option>)}
                       </select>
@@ -801,37 +1227,37 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   ))}
                 </div>
                 <div className="mt-8 pt-8 border-t border-white/5">
-                   <h4 className="text-stone-400 text-sm font-bold mb-4">Días de Cierre:</h4>
+                   <h4 className="text-stone-400 text-sm font-bold mb-4">Dias de Encerramento:</h4>
                    <div className="flex flex-wrap gap-2">
-                      {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day, idx) => (
+                      {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day, idx) => (
                         <button key={day} onClick={() => {
                           const newDays = workConfig.daysOff.includes(idx) ? workConfig.daysOff.filter(d => d !== idx) : [...workConfig.daysOff, idx];
                           setWorkConfig({...workConfig, daysOff: newDays});
-                        }} className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all border ${workConfig.daysOff.includes(idx) ? 'bg-rose-600 border-rose-600 text-white' : 'bg-stone-950 border-white/5 text-stone-600'}`}>{day.toUpperCase()}</button>
+                        }} className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all border ${workConfig.daysOff.includes(idx) ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-stone-950 border-white/5 text-stone-600'}`}>{day.toUpperCase()}</button>
                       ))}
                    </div>
                 </div>
-                <button onClick={handleSaveConfig} className="mt-10 flex items-center gap-3 bg-rose-600 hover:bg-rose-700 text-white px-10 py-5 rounded-2xl font-black shadow-xl shadow-rose-900/30 transition-all"><Save size={20}/> Guardar Jornada</button>
+                <button onClick={handleSaveConfig} className="mt-10 flex items-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-2xl font-black shadow-xl shadow-emerald-900/30 transition-all"><Save size={20}/> Guardar Configuração</button>
               </div>
 
-              {/* BLOQUEOS */}
+              {/* BLOQUEIOS MANUAIS */}
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="bg-stone-900 border border-white/5 p-8 rounded-[3rem] shadow-xl">
-                   <h3 className="text-white font-bold mb-6 flex items-center gap-3"><Ban className="text-rose-500"/> Bloquear Agenda</h3>
+                   <h3 className="text-white font-bold mb-6 flex items-center gap-3"><Ban className="text-emerald-500"/> Bloquear Horário</h3>
                    <form onSubmit={handleAddTimeBlock} className="space-y-6">
-                      <input required placeholder="Motivo (ex: Médico)" value={newBlock.title} onChange={e => setNewBlock({...newBlock, title: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500" />
-                      <input required type="date" value={newBlock.date} onChange={e => setNewBlock({...newBlock, date: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-rose-500" />
+                      <input required placeholder="Motivo (ex: Almoço Externo)" value={newBlock.title} onChange={e => setNewBlock({...newBlock, title: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-emerald-500" />
+                      <input required type="date" value={newBlock.date} onChange={e => setNewBlock({...newBlock, date: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white outline-none focus:border-emerald-500 color-scheme-dark" />
                       
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                           <label className="text-[10px] uppercase text-stone-500 font-bold ml-1">Desde</label>
-                           <select value={newBlock.startTime} onChange={e => setNewBlock({...newBlock, startTime: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white font-bold outline-none focus:border-rose-500">
+                           <label className="text-[10px] uppercase text-stone-500 font-bold ml-1">Início</label>
+                           <select value={newBlock.startTime} onChange={e => setNewBlock({...newBlock, startTime: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white font-bold outline-none focus:border-emerald-500">
                               {hoursOptions.map(h => <option key={h} value={h}>{h}</option>)}
                            </select>
                         </div>
                         <div>
-                           <label className="text-[10px] uppercase text-stone-500 font-bold ml-1">Hasta</label>
-                           <select value={newBlock.endTime} onChange={e => setNewBlock({...newBlock, endTime: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white font-bold outline-none focus:border-rose-500">
+                           <label className="text-[10px] uppercase text-stone-500 font-bold ml-1">Fim</label>
+                           <select value={newBlock.endTime} onChange={e => setNewBlock({...newBlock, endTime: e.target.value})} className="w-full bg-stone-950 border border-white/5 rounded-2xl p-4 text-white font-bold outline-none focus:border-emerald-500">
                               {hoursOptions.map(h => <option key={h} value={h}>{h}</option>)}
                            </select>
                         </div>
@@ -839,38 +1265,38 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                       <div className="bg-stone-950 border border-white/5 p-4 rounded-2xl space-y-4">
                         <div className="flex items-center justify-between">
-                           <div className="flex items-center gap-3 text-stone-300 font-bold text-sm"><Repeat size={18} className="text-rose-500"/> Recurrente</div>
-                           <input type="checkbox" checked={newBlock.isRecurring} onChange={e => setNewBlock({...newBlock, isRecurring: e.target.checked})} className="w-6 h-6 accent-rose-500" />
+                           <div className="flex items-center gap-3 text-stone-300 font-bold text-sm"><Repeat size={18} className="text-emerald-500"/> Recorrência</div>
+                           <input type="checkbox" checked={newBlock.isRecurring} onChange={e => setNewBlock({...newBlock, isRecurring: e.target.checked})} className="w-6 h-6 accent-emerald-500 cursor-pointer" />
                         </div>
                         {newBlock.isRecurring && (
                           <div className="space-y-4 animate-in slide-in-from-top-2">
                              <div className="flex gap-2">
                                {['daily', 'weekly', 'monthly'].map(type => (
-                                 <button key={type} type="button" onClick={() => setNewBlock({...newBlock, recurringType: type as any})} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase border transition-all ${newBlock.recurringType === type ? 'bg-rose-600 border-rose-600 text-white' : 'text-stone-500 border-white/5'}`}>
-                                   {type === 'daily' ? 'Diario' : type === 'weekly' ? 'Semanal' : 'Mensual'}
+                                 <button key={type} type="button" onClick={() => setNewBlock({...newBlock, recurringType: type as any})} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase border transition-all ${newBlock.recurringType === type ? 'bg-emerald-600 border-emerald-600 text-white shadow-md' : 'text-stone-500 border-white/5 hover:text-stone-300'}`}>
+                                   {type === 'daily' ? 'Diário' : type === 'weekly' ? 'Semanal' : 'Mensal'}
                                  </button>
                                ))}
                              </div>
                              <div className="flex items-center justify-between bg-stone-900 p-4 rounded-2xl border border-white/5">
-                                <span className="text-stone-400 font-bold text-xs flex items-center gap-2"><Hash size={16} className="text-rose-500"/> Repeticiones:</span>
+                                <span className="text-stone-400 font-bold text-xs flex items-center gap-2"><Hash size={16} className="text-emerald-500"/> Repetições:</span>
                                 <input type="number" min="1" max="52" value={newBlock.repeatCount} onChange={e => setNewBlock({...newBlock, repeatCount: parseInt(e.target.value)})} className="w-16 bg-stone-950 border border-white/5 rounded-lg p-2 text-white text-center font-black" />
                              </div>
                           </div>
                         )}
                       </div>
-                      <button type="submit" className="w-full py-5 bg-white text-stone-950 font-black rounded-2xl shadow-xl">Aplicar Bloqueo</button>
+                      <button type="submit" className="w-full py-5 bg-white text-stone-950 font-black rounded-2xl shadow-xl active:scale-95 transition-all hover:bg-emerald-50">Aplicar Bloqueio</button>
                    </form>
                 </div>
 
                 <div className="bg-stone-900 border border-white/5 p-8 rounded-[3rem] shadow-xl flex flex-col">
-                   <h3 className="text-white font-bold mb-6 flex items-center gap-3"><LayoutList className="text-rose-500"/> Lista de Bloqueos</h3>
+                   <h3 className="text-white font-bold mb-6 flex items-center gap-3"><LayoutList className="text-emerald-500"/> Bloqueios Ativos</h3>
                    <div className="space-y-3 overflow-y-auto max-h-[550px] pr-2 scrollbar-thin scrollbar-thumb-stone-800 text-left">
-                      {timeBlocks.length === 0 ? <div className="text-center py-10 text-stone-600 italic">No hay bloqueos activos.</div> : timeBlocks.map(block => (
-                        <div key={block.id} className="bg-stone-950 border border-white/5 p-5 rounded-2xl flex justify-between items-center animate-in zoom-in-95">
+                      {timeBlocks.length === 0 ? <div className="text-center py-10 text-stone-600 italic">Sem bloqueios ativos.</div> : timeBlocks.map(block => (
+                        <div key={block.id} className="bg-stone-950 border border-white/5 p-5 rounded-2xl flex justify-between items-center animate-in zoom-in-95 hover:border-emerald-900/40 transition-all">
                            <div>
-                              <div className="flex items-center gap-2 mb-1"><h4 className="text-stone-200 font-bold text-sm">{block.title}</h4>{block.isRecurring && <Repeat size={12} className="text-rose-500"/>}</div>
+                              <div className="flex items-center gap-2 mb-1"><h4 className="text-stone-200 font-bold text-sm">{block.title}</h4>{block.isRecurring && <Repeat size={12} className="text-emerald-500"/>}</div>
                               <p className="text-stone-500 text-[10px] uppercase font-black tracking-widest">{block.date} • {block.startTime}-{block.endTime}</p>
-                              {block.isRecurring && <p className="text-rose-600/60 text-[9px] font-black uppercase mt-1">{block.recurringType} ({block.repeatCount}x)</p>}
+                              {block.isRecurring && <p className="text-emerald-600/60 text-[9px] font-black uppercase mt-1">{block.recurringType} ({block.repeatCount}x)</p>}
                            </div>
                            <button onClick={() => deleteDoc(doc(db, "businesses", CLIENT_ID, "timeBlocks", block.id!))} className="text-stone-800 hover:text-red-500 p-2"><Trash2 size={18}/></button>
                         </div>
@@ -883,9 +1309,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         </div>
       </main>
 
-      <footer className="p-4 text-center text-stone-800 text-[10px] uppercase tracking-[0.4em] bg-stone-950 border-t border-white/5">
-        Sistema Elías León • Allan Dev v1.5
+      <footer className="p-4 text-center text-stone-800 text-[10px] uppercase font-bold tracking-[0.4em] bg-stone-950 border-t border-white/5">
+        Sistema de Gestão {BUSINESS_INFO.name} • Allan Dev v2.2
       </footer>
+
+      {/* MODAL HÍBRIDO (CRIAÇÃO E EDIÇÃO) */}
+      <AdminBookingModal 
+        isOpen={isAdminBookingOpen} 
+        onClose={() => setIsAdminBookingOpen(false)} 
+        services={dbServices} 
+        initialData={selectedAppointment}
+      />
     </div>
   );
 };
@@ -901,6 +1335,7 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { Lock, Mail, X, Loader2, Scissors } from 'lucide-react';
+import { BUSINESS_INFO } from '../constants';
 
 interface AdminLoginProps {
   isOpen: boolean;
@@ -926,7 +1361,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onLoginSuccess
       onLoginSuccess();
       onClose();
     } catch (err: any) {
-      setError('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+      setError('Credenciais incorretas. Por favor, tente novamente.');
       console.error(err);
     }
     setLoading(false);
@@ -936,22 +1371,22 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onLoginSuccess
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose} />
       
-      <div className="relative bg-stone-900 border border-rose-900/30 w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 animate-in zoom-in-95 duration-300">
+      <div className="relative bg-stone-900 border border-emerald-900/30 w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 animate-in zoom-in-95 duration-300">
         <button onClick={onClose} className="absolute top-6 right-6 text-stone-500 hover:text-white">
           <X size={24} />
         </button>
 
         <div className="text-center mb-10">
-          <div className="w-16 h-16 bg-rose-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-rose-900/40">
+          <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-emerald-900/40">
             <Scissors size={32} />
           </div>
-          <h2 className="text-2xl font-serif text-white font-bold">Acceso de Gestión</h2>
-          <p className="text-stone-500 text-sm mt-2 font-light">Peluquería Elías León</p>
+          <h2 className="text-2xl font-serif text-white font-bold uppercase tracking-tight">Acesso de Gestão</h2>
+          <p className="text-emerald-500 text-xs mt-2 font-bold uppercase tracking-widest">{BUSINESS_INFO.name} {BUSINESS_INFO.subName}</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs p-4 rounded-xl text-center">
+            <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs p-4 rounded-xl text-center font-bold">
               {error}
             </div>
           )}
@@ -961,8 +1396,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onLoginSuccess
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-600" size={18} />
               <input 
                 type="email" 
-                placeholder="Email de administrador"
-                className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-rose-500/50 transition-all"
+                placeholder="Email do administrador"
+                className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500/50 transition-all font-medium"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -973,8 +1408,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onLoginSuccess
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-600" size={18} />
               <input 
                 type="password" 
-                placeholder="Contraseña"
-                className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-rose-500/50 transition-all"
+                placeholder="Palavra-passe"
+                className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500/50 transition-all font-medium"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -985,21 +1420,21 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onLoginSuccess
           <button 
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-2xl transition-all shadow-xl shadow-rose-900/20 flex justify-center items-center gap-2"
+            className="w-full py-5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl transition-all shadow-xl shadow-emerald-900/20 flex justify-center items-center gap-2 uppercase tracking-widest active:scale-[0.98]"
           >
-            {loading ? <Loader2 className="animate-spin" /> : "Entrar en el Panel"}
+            {loading ? <Loader2 className="animate-spin" /> : "Entrar no Painel"}
           </button>
         </form>
 
-        <p className="text-center text-stone-600 text-[10px] mt-8 uppercase tracking-widest">
-          Sistema de Gestión Allan Dev
+        <p className="text-center text-stone-600 text-[10px] mt-8 uppercase tracking-[0.4em] font-bold">
+          Sistema de Gestão Allan Dev v2.0
         </p>
       </div>
     </div>
   );
 };
 
-export default AdminLogin; 
+export default AdminLogin;
 
 
 ==================================================
@@ -1009,9 +1444,10 @@ ARQUIVO: src\components\BookingModal.tsx
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, User, Phone, CheckCircle2, ChevronRight, ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
 import { Service, Appointment, WorkConfig, TimeBlock } from '../types';
-// Importação da conexão com o banco
+// Importação da conexão e das constantes multi-tenant
 import { db } from '../firebase';
 import { collection, addDoc, query, where, getDocs, orderBy, onSnapshot, serverTimestamp, doc } from 'firebase/firestore';
+import { CLIENT_ID, BUSINESS_INFO } from '../constants';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -1043,23 +1479,23 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // 2. Escutar Dados Globais (Serviços, Configuração e Bloqueios)
+  // 2. Escutar Dados Globais (Multi-tenant path fix)
   useEffect(() => {
     if (isOpen) {
       setLoadingData(true);
       
-      // Escutar Serviços
-      const unsubServ = onSnapshot(query(collection(db, "services"), orderBy("name", "asc")), (snap) => {
+      // Escutar Serviços do Cliente específico
+      const unsubServ = onSnapshot(query(collection(db, "businesses", CLIENT_ID, "services"), orderBy("name", "asc")), (snap) => {
         setDbServices(snap.docs.map(d => ({ id: d.id, ...d.data() } as Service)));
       });
 
-      // Escutar Horário de Trabalho
-      const unsubConfig = onSnapshot(doc(db, "config", "work-schedule"), (snap) => {
+      // Escutar Horário de Trabalho do Cliente específico
+      const unsubConfig = onSnapshot(doc(db, "businesses", CLIENT_ID, "config", "work-schedule"), (snap) => {
         if (snap.exists()) setWorkConfig(snap.data() as WorkConfig);
       });
 
-      // Escutar Bloqueios Manuais
-      const unsubBlocks = onSnapshot(collection(db, "timeBlocks"), (snap) => {
+      // Escutar Bloqueios Manuais do Cliente específico
+      const unsubBlocks = onSnapshot(collection(db, "businesses", CLIENT_ID, "timeBlocks"), (snap) => {
         setTimeBlocks(snap.docs.map(d => ({ id: d.id, ...d.data() } as TimeBlock)));
       });
 
@@ -1068,13 +1504,13 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // 3. Buscar Agendamentos Ocupados para a data selecionada
+  // 3. Buscar Agendamentos Ocupados (Multi-tenant path fix)
   useEffect(() => {
     if (selectedDate && isOpen) {
       const fetchBookings = async () => {
         setLoading(true);
         try {
-          const q = query(collection(db, "appointments"), where("date", "==", selectedDate));
+          const q = query(collection(db, "businesses", CLIENT_ID, "appointments"), where("date", "==", selectedDate));
           const snapshot = await getDocs(q);
           const busy = snapshot.docs.map(doc => {
             const data = doc.data();
@@ -1094,7 +1530,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
 
   // --- MOTOR LÓGICO DE FILTRAGEM ---
   const generateAvailableTimes = () => {
-    // Se não houver configuração ou serviço selecionado, retorna vazio
     if (!workConfig || !selectedService) return [];
     
     const slots = [];
@@ -1103,68 +1538,46 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     
     let currentMin = startH * 60 + startM;
     const dayEndMin = endH * 60 + endM;
-    const interval = 30; // Slots de 30 em 30 min
+    const interval = 30;
 
-    // Converter intervalos de descanso para minutos
     const breakStart = workConfig.breakStart ? workConfig.breakStart.split(':').map(Number).reduce((h, m) => h * 60 + m) : null;
     const breakEnd = workConfig.breakEnd ? workConfig.breakEnd.split(':').map(Number).reduce((h, m) => h * 60 + m) : null;
 
     const selectedDayObj = new Date(selectedDate);
 
-    // Loop para gerar cada horário possível
     while (currentMin + selectedService.duration <= dayEndMin) {
       const slotEnd = currentMin + selectedService.duration;
       const timeStr = `${Math.floor(currentMin/60).toString().padStart(2,'0')}:${(currentMin%60).toString().padStart(2,'0')}`;
 
       let isBlocked = false;
 
-      // A. Verificar Intervalo (Almoço)
       if (breakStart !== null && breakEnd !== null) {
-        // Se o serviço começa antes do fim do almoço E termina depois do início do almoço
         if (currentMin < breakEnd && slotEnd > breakStart) isBlocked = true;
       }
 
-      // B. Verificar Agendamentos Ocupados (Clientes)
       if (!isBlocked) {
         isBlocked = occupiedSlots.some(busy => currentMin < busy.end && slotEnd > busy.start);
       }
 
-      // C. Verificar Bloqueios Manuais do Admin (com recorrência)
       if (!isBlocked) {
         isBlocked = timeBlocks.some(block => {
           const [bsh, bsm] = block.startTime.split(':').map(Number);
           const [beh, bem] = block.endTime.split(':').map(Number);
           const bStart = bsh * 60 + bsm;
           const bEnd = beh * 60 + bem;
-
           const blockStartDate = new Date(block.date);
-          // Diferença em dias entre a data selecionada e o início do bloqueio
           const diffTime = selectedDayObj.getTime() - blockStartDate.getTime();
           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-          // 1. Bloqueio na data exata
-          if (block.date === selectedDate) {
-            return currentMin < bEnd && slotEnd > bStart;
-          }
+          if (block.date === selectedDate) return currentMin < bEnd && slotEnd > bStart;
 
-          // 2. Lógica de Recorrência
           if (block.isRecurring && diffDays > 0) {
             const repeats = block.repeatCount || 1;
-            
-            // Diário
-            if (block.recurringType === 'daily' && diffDays < repeats) {
-              return currentMin < bEnd && slotEnd > bStart;
-            }
-            // Semanal (Verifica se é o mesmo dia da semana e se está dentro do limite)
-            if (block.recurringType === 'weekly' && diffDays % 7 === 0 && (diffDays / 7) < repeats) {
-              return currentMin < bEnd && slotEnd > bStart;
-            }
-            // Mensal
+            if (block.recurringType === 'daily' && diffDays < repeats) return currentMin < bEnd && slotEnd > bStart;
+            if (block.recurringType === 'weekly' && diffDays % 7 === 0 && (diffDays / 7) < repeats) return currentMin < bEnd && slotEnd > bStart;
             if (block.recurringType === 'monthly') {
                const monthDiff = (selectedDayObj.getFullYear() - blockStartDate.getFullYear()) * 12 + (selectedDayObj.getMonth() - blockStartDate.getMonth());
-               if (selectedDayObj.getDate() === blockStartDate.getDate() && monthDiff > 0 && monthDiff < repeats) {
-                  return currentMin < bEnd && slotEnd > bStart;
-               }
+               if (selectedDayObj.getDate() === blockStartDate.getDate() && monthDiff > 0 && monthDiff < repeats) return currentMin < bEnd && slotEnd > bStart;
             }
           }
           return false;
@@ -1183,8 +1596,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
       const d = new Date();
       d.setDate(d.getDate() + i);
       const dayOfWeek = d.getDay();
-      
-      // Filtrar dias de folga configurados no Admin
       if (workConfig && !workConfig.daysOff.includes(dayOfWeek)) {
         days.push(d.toISOString().split('T')[0]);
       }
@@ -1200,7 +1611,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
       const endTotal = (h * 60) + m + selectedService.duration;
       const endTimeStr = `${Math.floor(endTotal/60).toString().padStart(2,'0')}:${(endTotal%60).toString().padStart(2,'0')}`;
 
-      await addDoc(collection(db, "appointments"), {
+      await addDoc(collection(db, "businesses", CLIENT_ID, "appointments"), {
         serviceId: selectedService.id,
         serviceName: selectedService.name,
         clientName: formData.name,
@@ -1211,7 +1622,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
         createdAt: serverTimestamp()
       });
       setStep(5);
-    } catch (e) { alert("Error al reservar."); }
+    } catch (e) { alert("Erro ao reservar."); }
     setLoading(false);
   };
 
@@ -1219,38 +1630,38 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 text-left">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose} />
       
-      <div className="relative bg-stone-900 border border-rose-900/30 w-full max-w-lg overflow-hidden rounded-[2.5rem] shadow-2xl animate-in zoom-in-95 duration-300">
+      <div className="relative bg-stone-900 border border-emerald-900/30 w-full max-w-lg overflow-hidden rounded-[2.5rem] shadow-2xl animate-in zoom-in-95 duration-300">
         
         {/* Header */}
         <div className="p-6 border-b border-white/5 flex justify-between items-center bg-stone-900/50">
           <div>
-            <h2 className="text-xl font-bold text-white font-serif tracking-tight">Reservar Cita</h2>
-            <p className="text-rose-500 text-xs uppercase tracking-widest font-bold">Peluquería Elías León</p>
+            <h2 className="text-xl font-bold text-white font-serif tracking-tight">Marcar Serviço</h2>
+            <p className="text-emerald-500 text-xs uppercase tracking-widest font-bold">{BUSINESS_INFO.name} {BUSINESS_INFO.subName}</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-stone-400 hover:text-white transition-colors"><X size={24} /></button>
         </div>
 
         <div className="p-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-stone-800">
           
-          {/* STEP 1: Seleção de Serviço Dinâmico */}
+          {/* STEP 1: Serviços */}
           {step === 1 && (
             <div className="space-y-4 animate-in slide-in-from-right-4 duration-300">
-              <p className="text-stone-400 text-sm mb-4">¿Qué servicio deseas hoy?</p>
+              <p className="text-stone-400 text-sm mb-4">Que serviço desejas hoje?</p>
               
               {loadingData ? (
-                <div className="flex justify-center py-10"><Loader2 className="animate-spin text-rose-500" size={32} /></div>
+                <div className="flex justify-center py-10"><Loader2 className="animate-spin text-emerald-500" size={32} /></div>
               ) : dbServices.length === 0 ? (
-                <p className="text-stone-500 italic text-center py-10">No hay servicios disponibles.</p>
+                <p className="text-stone-500 italic text-center py-10">Não há serviços disponíveis.</p>
               ) : (
                 dbServices.map((s) => (
-                  <button key={s.id} onClick={() => { setSelectedService(s); setStep(2); }} className="w-full flex justify-between items-center p-4 rounded-2xl bg-stone-950 border border-white/5 hover:border-rose-500/50 group transition-all text-left">
+                  <button key={s.id} onClick={() => { setSelectedService(s); setStep(2); }} className="w-full flex justify-between items-center p-4 rounded-2xl bg-stone-950 border border-white/5 hover:border-emerald-500/50 group transition-all text-left">
                     <div className="flex-1 pr-4">
-                      <h3 className="text-white font-bold group-hover:text-rose-500 transition-colors">{s.name}</h3>
+                      <h3 className="text-white font-bold group-hover:text-emerald-500 transition-colors">{s.name}</h3>
                       <div className="flex items-center gap-3 mt-1 text-stone-500 text-xs font-medium">
-                        <Clock size={12}/> {s.duration} min | <span className="text-rose-600 font-bold">{s.price}</span>
+                        <Clock size={12}/> {s.duration} min | <span className="text-emerald-600 font-bold">{s.price}</span>
                       </div>
                     </div>
-                    <ChevronRight size={20} className="text-stone-700 group-hover:text-rose-500 transition-all" />
+                    <ChevronRight size={20} className="text-stone-700 group-hover:text-emerald-500 transition-all" />
                   </button>
                 ))
               )}
@@ -1260,12 +1671,12 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
           {/* STEP 2: Data */}
           {step === 2 && (
             <div className="space-y-4 animate-in slide-in-from-right-4 duration-300">
-              <button onClick={() => setStep(1)} className="text-stone-500 text-xs flex items-center gap-1 hover:text-rose-500 transition-colors"><ChevronLeft size={14}/> Volver a servicios</button>
-              <h3 className="text-white font-bold flex items-center gap-2"><Calendar size={18} className="text-rose-500"/> Selecciona un día</h3>
+              <button onClick={() => setStep(1)} className="text-stone-500 text-xs flex items-center gap-1 hover:text-emerald-500 transition-colors"><ChevronLeft size={14}/> Voltar aos serviços</button>
+              <h3 className="text-white font-bold flex items-center gap-2"><Calendar size={18} className="text-emerald-500"/> Escolha um dia</h3>
               <div className="grid grid-cols-3 gap-2">
                 {getNextDays().map((d) => (
-                  <button key={d} onClick={() => { setSelectedDate(d); setStep(3); }} className={`p-3 rounded-2xl border transition-all text-center ${selectedDate === d ? 'bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-900/20' : 'bg-stone-950 border-white/5 text-stone-400 hover:border-rose-500/50'}`}>
-                    <span className="block text-[10px] uppercase font-bold opacity-60">{new Date(d).toLocaleDateString('es-ES', { weekday: 'short' })}</span>
+                  <button key={d} onClick={() => { setSelectedDate(d); setStep(3); }} className={`p-3 rounded-2xl border transition-all text-center ${selectedDate === d ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg shadow-emerald-900/20' : 'bg-stone-950 border-white/5 text-stone-400 hover:border-emerald-500/50'}`}>
+                    <span className="block text-[10px] uppercase font-bold opacity-60">{new Date(d).toLocaleDateString('pt-PT', { weekday: 'short' })}</span>
                     <span className="block text-lg font-black">{new Date(d).getDate()}</span>
                   </button>
                 ))}
@@ -1276,17 +1687,17 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
           {/* STEP 3: Horário */}
           {step === 3 && (
             <div className="space-y-4 animate-in slide-in-from-right-4 duration-300">
-              <button onClick={() => setStep(2)} className="text-stone-500 text-xs flex items-center gap-1 hover:text-rose-500 transition-colors"><ChevronLeft size={14}/> Volver al calendario</button>
-              <h3 className="text-white font-bold flex items-center gap-2"><Clock size={18} className="text-rose-500"/> Horarios para {selectedService?.name}</h3>
+              <button onClick={() => setStep(2)} className="text-stone-500 text-xs flex items-center gap-1 hover:text-emerald-500 transition-colors"><ChevronLeft size={14}/> Voltar ao calendário</button>
+              <h3 className="text-white font-bold flex items-center gap-2"><Clock size={18} className="text-emerald-500"/> Horários para {selectedService?.name}</h3>
               
               {loading ? (
-                <div className="flex justify-center py-10"><Loader2 className="animate-spin text-rose-500" size={32} /></div>
+                <div className="flex justify-center py-10"><Loader2 className="animate-spin text-emerald-500" size={32} /></div>
               ) : (
                 <div className="grid grid-cols-4 gap-2">
                   {generateAvailableTimes().map((t) => (
-                    <button key={t} onClick={() => { setSelectedTime(t); setStep(4); }} className={`p-2 rounded-xl border text-sm font-bold transition-all ${selectedTime === t ? 'bg-rose-600 border-rose-600 text-white' : 'bg-stone-950 border-white/5 text-stone-400 hover:border-rose-500'}`}>{t}</button>
+                    <button key={t} onClick={() => { setSelectedTime(t); setStep(4); }} className={`p-2 rounded-xl border text-sm font-bold transition-all ${selectedTime === t ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-stone-950 border-white/5 text-stone-400 hover:border-emerald-500'}`}>{t}</button>
                   ))}
-                  {generateAvailableTimes().length === 0 && <div className="col-span-4 bg-red-500/5 p-6 rounded-2xl text-red-500 text-xs flex flex-col items-center gap-3 border border-red-500/10"><AlertCircle size={24}/><p className="text-center font-bold">No hay huecos disponibles.</p></div>}
+                  {generateAvailableTimes().length === 0 && <div className="col-span-4 bg-red-500/5 p-6 rounded-2xl text-red-500 text-xs flex flex-col items-center gap-3 border border-red-500/10"><AlertCircle size={24}/><p className="text-center font-bold">Sem horários disponíveis para este dia.</p></div>}
                 </div>
               )}
             </div>
@@ -1295,20 +1706,20 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
           {/* STEP 4: Formulário */}
           {step === 4 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-              <button onClick={() => setStep(3)} className="text-stone-500 text-xs flex items-center gap-1 hover:text-rose-500 transition-colors"><ChevronLeft size={14}/> Volver a horarios</button>
-              <h3 className="text-white font-bold flex items-center gap-2"><User size={18} className="text-rose-500"/> Tus datos de contacto</h3>
+              <button onClick={() => setStep(3)} className="text-stone-500 text-xs flex items-center gap-1 hover:text-emerald-500 transition-colors"><ChevronLeft size={14}/> Voltar aos horários</button>
+              <h3 className="text-white font-bold flex items-center gap-2"><User size={18} className="text-emerald-500"/> Os teus dados</h3>
               <div className="space-y-4">
                 <div className="relative">
                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-600" size={18} />
-                   <input type="text" placeholder="Nombre completo" className="w-full bg-stone-950 border border-white/5 rounded-2xl py-5 pl-12 pr-4 text-white outline-none focus:border-rose-500/50 transition-all font-bold" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                   <input type="text" placeholder="Nome completo" className="w-full bg-stone-950 border border-white/5 rounded-2xl py-5 pl-12 pr-4 text-white outline-none focus:border-emerald-500/50 transition-all font-bold" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
                 </div>
                 <div className="relative">
                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-600" size={18} />
-                   <input type="tel" placeholder="Tu teléfono" className="w-full bg-stone-950 border border-white/5 rounded-2xl py-5 pl-12 pr-4 text-white outline-none focus:border-rose-500/50 transition-all font-bold" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+                   <input type="tel" placeholder="Teu telemóvel" className="w-full bg-stone-950 border border-white/5 rounded-2xl py-5 pl-12 pr-4 text-white outline-none focus:border-emerald-500/50 transition-all font-bold" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
                 </div>
               </div>
-              <button disabled={loading || !formData.name || !formData.phone} onClick={handleBooking} className="w-full py-5 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-2xl transition-all flex justify-center items-center gap-2 shadow-xl shadow-rose-900/20 active:scale-95 transition-all">
-                {loading ? <Loader2 className="animate-spin" /> : "Confirmar Mi Reserva"}
+              <button disabled={loading || !formData.name || !formData.phone} onClick={handleBooking} className="w-full py-5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl transition-all flex justify-center items-center gap-2 shadow-xl shadow-emerald-900/20 active:scale-95 transition-all">
+                {loading ? <Loader2 className="animate-spin" /> : "Confirmar Marcação"}
               </button>
             </div>
           )}
@@ -1316,12 +1727,12 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
           {/* STEP 5: Sucesso */}
           {step === 5 && (
             <div className="py-10 text-center space-y-6 animate-in zoom-in duration-500">
-              <div className="w-24 h-24 bg-rose-600/20 rounded-full flex items-center justify-center mx-auto text-rose-500 shadow-inner"><CheckCircle2 size={56} /></div>
+              <div className="w-24 h-24 bg-emerald-600/20 rounded-full flex items-center justify-center mx-auto text-emerald-500 shadow-inner"><CheckCircle2 size={56} /></div>
               <div className="px-4">
-                <h3 className="text-3xl font-serif text-white font-bold tracking-tight">¡Reserva Lista!</h3>
-                <p className="text-stone-400 mt-4 leading-relaxed font-medium">Gracias <b>{formData.name.split(' ')[0]}</b>, Elías te espera el <b>{new Date(selectedDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}</b> a las <b>{selectedTime}</b>.</p>
+                <h3 className="text-3xl font-serif text-white font-bold tracking-tight">Marcação Concluída!</h3>
+                <p className="text-stone-400 mt-4 leading-relaxed font-medium">Obrigado <b>{formData.name.split(' ')[0]}</b>, a equipa {BUSINESS_INFO.name} espera por ti no dia <b>{new Date(selectedDate).toLocaleDateString('pt-PT', { day: 'numeric', month: 'long' })}</b> às <b>{selectedTime}</b>.</p>
               </div>
-              <button onClick={onClose} className="w-full py-5 bg-stone-800 text-white font-black rounded-2xl hover:bg-stone-700 transition-all">Cerrar</button>
+              <button onClick={onClose} className="w-full py-5 bg-stone-800 text-white font-black rounded-2xl hover:bg-stone-700 transition-all">Fechar</button>
             </div>
           )}
         </div>
@@ -1377,28 +1788,28 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
   }, []);
 
   const navLinks = [
-    { name: 'Inicio', href: '#inicio' },
-    { name: 'Servicios', href: '#servicos' },
-    { name: 'Sobre Elías', href: '#sobre' },
+    { name: 'Início', href: '#inicio' },
+    { name: 'Serviços', href: '#servicos' },
+    { name: 'A Barbearia', href: '#sobre' },
     { name: 'Contacto', href: '#contacto' },
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black/95 backdrop-blur-md py-4 shadow-xl border-b border-rose-900/20' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black/95 backdrop-blur-md py-4 shadow-xl border-b border-emerald-900/20' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
         
-        {/* LOGO PELUQUERÍA ELÍAS COM ACESSO SECRETO */}
+        {/* LOGO LA BARBIÈRE COM ACESSO SECRETO */}
         <div 
           className="flex items-center gap-2 group cursor-pointer select-none" 
           onClick={handleLogoClick}
-          title="Peluquería Elías León"
+          title={BUSINESS_INFO.name}
         >
-          <div className="w-10 h-10 bg-rose-600 rounded-lg flex items-center justify-center text-white group-hover:rotate-12 transition-transform shadow-lg shadow-rose-900/40">
+          <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center text-white group-hover:rotate-12 transition-transform shadow-lg shadow-emerald-900/40">
             <Scissors size={24} />
           </div>
           <div>
-            <h1 className="font-serif text-xl font-bold tracking-tight text-white leading-none uppercase">Elías</h1>
-            <p className="text-[9px] uppercase tracking-[0.2em] text-rose-500 font-bold">Peluquería León</p>
+            <h1 className="font-serif text-xl font-bold tracking-tight text-white leading-none uppercase">{BUSINESS_INFO.name}</h1>
+            <p className="text-[9px] uppercase tracking-[0.2em] text-emerald-500 font-bold">{BUSINESS_INFO.subName}</p>
           </div>
         </div>
 
@@ -1408,7 +1819,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
             <a 
               key={link.name} 
               href={link.href} 
-              className="text-sm font-medium text-stone-300 hover:text-rose-500 transition-colors uppercase tracking-wider"
+              className="text-sm font-medium text-stone-300 hover:text-emerald-500 transition-colors uppercase tracking-wider"
             >
               {link.name}
             </a>
@@ -1417,10 +1828,10 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
             href={BUSINESS_INFO.bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-rose-600 hover:bg-rose-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-rose-900/20 uppercase tracking-wide flex items-center gap-2"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-emerald-900/20 uppercase tracking-wide flex items-center gap-2"
           >
             <Phone size={16} />
-            Llamar Ahora
+            Ligar Agora
           </a>
         </div>
 
@@ -1435,13 +1846,13 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-stone-900 border-t border-rose-900/20 animate-in slide-in-from-top duration-300 shadow-2xl">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-stone-900 border-t border-emerald-900/20 animate-in slide-in-from-top duration-300 shadow-2xl">
           <div className="flex flex-col p-6 gap-4">
             {navLinks.map((link) => (
               <a 
                 key={link.name} 
                 href={link.href} 
-                className="text-lg font-medium text-stone-100 hover:text-rose-500 transition-colors"
+                className="text-lg font-medium text-stone-100 hover:text-emerald-500 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.name}
@@ -1451,7 +1862,7 @@ const Navbar: React.FC<NavbarProps> = ({ onAdminClick }) => {
               href={BUSINESS_INFO.bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-rose-600 text-white text-center py-4 rounded-xl font-bold mt-2 shadow-lg uppercase"
+              className="bg-emerald-600 text-white text-center py-4 rounded-xl font-bold mt-2 shadow-lg uppercase"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Reservar Cita
@@ -1471,88 +1882,87 @@ ARQUIVO: src\constants.tsx
 ==================================================
 
 // src/constants.tsx
-export const CLIENT_ID = 'elias-badajoz';
+
+// 1. Identificador Único do Cliente (Multi-tenant)
+// Isso criará a pasta: businesses/la-barbiere-sintra/ no seu Firestore
+export const CLIENT_ID = 'la-barbiere-sintra';
+
+// 2. Informações de Exibição do Negócio
 export const BUSINESS_INFO = {
-  name: "Peluquería Elías",
-  owner: "Elías León",
-  phone: '+34 924 25 21 01', 
-  address: 'Pl. Francisco Vera, 2, Local 3E',
-  city: '06011 Badajoz, España',
-  openingHours: 'Lunes a Sábado: 11:00 - 21:00',
-  bookingUrl: 'https://wa.me/34924252101', 
-  googleMapsUrl: 'https://maps.app.goo.gl/1MAG4dJdweFEPDDA9',
-  instagramUrl: 'https://instagram.com/' 
+  name: "La Barbière",
+  subName: "Espaço Homem",
+  owner: "Equipa La Barbière",
+  phone: '910 152 688', 
+  address: 'Av. Heliodoro Salgado 102',
+  city: '2710-573 Sintra, Portugal',
+  openingHours: 'Segunda a Sábado: 09:00 - 20:00',
+  bookingUrl: 'https://wa.me/351910152688', 
+  googleMapsUrl: 'https://maps.app.goo.gl/Mes2wiu4m1G6Mweu7', 
+  instagramUrl: 'https://instagram.com/labarbiere' 
 };
 
+// 3. Serviços Iniciais (Fallback)
+// Nota: Assim que você cadastrar no Admin, o sistema usará os dados do Firestore
 export const SERVICES = [
   { 
     id: '1', 
-    name: 'Corte Unisex', 
-    description: 'Cortes clásicos y modernos adaptados a tu estilo personal.', 
-    price: 'Desde 12€',
-    duration: 30 // 30 minutos
+    name: 'Corte de Cabelo', 
+    description: 'Corte clássico ou moderno com acabamento premium.', 
+    price: '12€',
+    duration: 30
   },
   { 
     id: '2', 
-    name: 'Peinados y Estilo', 
-    description: 'Especialistas en peinados para eventos y cuidado diario.', 
-    price: 'Consultar',
-    duration: 45 // 45 minutos
+    name: 'Barba Completa', 
+    description: 'Design de barba com toalha quente e produtos específicos.', 
+    price: '10€',
+    duration: 30
   },
   { 
     id: '3', 
-    name: 'Color y Mechas', 
-    description: 'Técnicas avanzadas de coloración para un brillo espectacular.', 
-    price: 'Consultar',
-    duration: 90 // 90 minutos
-  },
-  { 
-    id: '4', 
-    name: 'Arreglo de Barba', 
-    description: 'Cuidado tradicional de la barba con acabado profesional.', 
-    price: 'Desde 8€',
-    duration: 20 // 20 minutos
+    name: 'Corte & Barba', 
+    description: 'Pacote completo para renovar o visual masculino.', 
+    price: '20€',
+    duration: 60
   }
 ];
 
+// 4. Reviews extraídas/adaptadas do Google Maps Sintra
 export const REVIEWS = [
   {
     id: 1,
-    author: 'Juan Carlos Gutiérrez',
-    date: 'Hace 2 meses',
-    text: 'Elías me ha parecido un gran profesional e mejor persona. Volveré con toda seguridad.',
-    avatar: 'https://ui-avatars.com/api/?name=Juan+Carlos&background=e11d48&color=fff'
+    author: 'Alex Sneade',
+    date: 'há 11 meses',
+    text: 'Barbeiro muito atencioso. Se precisar de um serviço de barbeiro na zona de Sintra, recomendo vivamente!',
+    avatar: 'https://ui-avatars.com/api/?name=Alex+Sneade&background=059669&color=fff'
   },
   {
     id: 2,
-    author: 'Carlos C.',
-    date: 'Hace 6 meses',
-    text: 'He ido hoy a cortar y peinar para un evento. Trato exquisito y profesionalidad. ¡Muchas gracias!',
-    avatar: 'https://ui-avatars.com/api/?name=Carlos+C&background=e11d48&color=fff'
+    author: 'Killian Lobato',
+    date: 'há 9 meses',
+    text: 'Muito profissional, preço acessível e muito brio no que toca ao perfeccionismo.',
+    avatar: 'https://ui-avatars.com/api/?name=Killian+Lobato&background=059669&color=fff'
   },
   {
     id: 3,
-    author: 'David Leñador',
-    date: 'Hace un año',
-    text: 'Después de tantos años, se refleja lo que recuerdo de Elías como profesional. Siempre salía con una sonrisa.',
-    avatar: 'https://ui-avatars.com/api/?name=David+Lenador&background=e11d48&color=fff'
+    author: 'Mikael Victor Castro',
+    date: 'há 6 meses',
+    text: 'Um lugar ótimo para cuidar do estilo. Profissionalismo e bom ambiente garantidos.',
+    avatar: 'https://ui-avatars.com/api/?name=Mikael+Victor&background=059669&color=fff'
   }
 ];
 
-export const IMAGES = {
-  cortes: [
-    { id: 1, url: '/cortes/corte-01.webp', alt: 'Estilo Elías León' },
-    { id: 2, url: '/cortes/corte-02.webp', alt: 'Peluquería Badajoz' },
-    { id: 3, url: '/cortes/corte-03.webp', alt: 'Peinado Profesional' },
-    { id: 4, url: '/cortes/corte-04.webp', alt: 'Corte Unisex' },
-  ],
-  interior: [
-    { id: 1, url: '/interior/espaco-01.webp', alt: 'Entrada Peluquería' },
-    { id: 2, url: '/interior/espaco-02.webp', alt: 'Interior del salón' },
-    { id: 3, url: '/interior/espaco-03.webp', alt: 'Detalles Peluquería Elías' },
-    { id: 4, url: '/interior/espaco-04.webp', alt: 'Zona de lavado' },
-  ]
-};
+// 5. Galeria Unificada (8 fotos padrão .webp na pasta public/images/)
+export const GALLERY_IMAGES = [
+  { id: 1, url: '/images/foto01.webp', alt: 'La Barbière Sintra - Estilo 01' },
+  { id: 2, url: '/images/foto02.webp', alt: 'La Barbière Sintra - Estilo 02' },
+  { id: 3, url: '/images/foto03.webp', alt: 'La Barbière Sintra - Estilo 03' },
+  { id: 4, url: '/images/foto04.webp', alt: 'La Barbière Sintra - Estilo 04' },
+  { id: 5, url: '/images/foto05.webp', alt: 'La Barbière Sintra - Interior 01' },
+  { id: 6, url: '/images/foto06.webp', alt: 'La Barbière Sintra - Interior 02' },
+  { id: 7, url: '/images/foto07.webp', alt: 'La Barbière Sintra - Interior 03' },
+  { id: 8, url: '/images/foto08.webp', alt: 'La Barbière Sintra - Interior 04' },
+];
 
 
 ==================================================

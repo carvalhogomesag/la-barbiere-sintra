@@ -7,9 +7,10 @@ import {
 import { 
   LogOut, Trash2, Calendar as CalendarIcon, User, 
   Phone, Clock, Loader2, Scissors, Plus, LayoutDashboard, 
-  Settings, Briefcase, LayoutList, CalendarDays, Ban, Save, Repeat, Hash
+  Settings, Briefcase, LayoutList, CalendarDays, Ban, Save, Repeat, Hash,
+  Instagram, Facebook, Music2, Camera, Palette, Link, Globe, AlertTriangle
 } from 'lucide-react';
-import { Appointment, Service, WorkConfig, TimeBlock } from '../types';
+import { Appointment, Service, WorkConfig, TimeBlock, SocialLinks, GalleryImage } from '../types';
 import AdminCalendar from './AdminCalendar';
 import AdminBookingModal from './AdminBookingModal';
 import { BUSINESS_INFO, CLIENT_ID } from '../constants';
@@ -20,7 +21,7 @@ interface AdminDashboardProps {
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   // --- NAVEGAÇÃO E MODAIS ---
-  const [activeTab, setActiveTab] = useState<'appointments' | 'services' | 'settings'>('appointments');
+  const [activeTab, setActiveTab] = useState<'appointments' | 'services' | 'settings' | 'visual'>('appointments');
   const [appointmentsMode, setAppointmentsMode] = useState<'calendar' | 'list'>('calendar');
   const [isAdminBookingOpen, setIsAdminBookingOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
@@ -32,9 +33,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [workConfig, setWorkConfig] = useState<WorkConfig>({
     startHour: '11:00', endHour: '21:00', breakStart: '14:00', breakEnd: '15:00', daysOff: [0]
   });
+
+  // --- DADOS VISUAIS E SOCIAIS ---
+  const [socialLinks, setSocialLinks] = useState<SocialLinks>({
+    instagram: '', facebook: '', tiktok: ''
+  });
+  const [gallery, setGallery] = useState<string[]>(Array(8).fill(''));
   
   const [loadingApp, setLoadingApp] = useState(true);
   const [loadingServ, setLoadingServ] = useState(true);
+  const [loadingVisual, setLoadingVisual] = useState(false);
 
   // --- FORMULÁRIOS DE CRIAÇÃO RÁPIDA ---
   const [newService, setNewService] = useState({ name: '', description: '', price: '', duration: 30 });
@@ -52,6 +60,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
     
+    // 1. Agendamentos
     const qApp = query(
       collection(db, "businesses", CLIENT_ID, "appointments"), 
       where("date", ">=", today), 
@@ -62,21 +71,33 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       setLoadingApp(false);
     });
 
+    // 2. Serviços
     const qServ = query(collection(db, "businesses", CLIENT_ID, "services"), orderBy("name", "asc"));
     const unsubServ = onSnapshot(qServ, (snap) => {
       setDbServices(snap.docs.map(d => ({ id: d.id, ...d.data() } as Service)));
       setLoadingServ(false);
     });
 
+    // 3. Jornada
     const unsubConfig = onSnapshot(doc(db, "businesses", CLIENT_ID, "config", "work-schedule"), (snap) => {
       if (snap.exists()) setWorkConfig(snap.data() as WorkConfig);
     });
 
+    // 4. Bloqueios
     const unsubBlocks = onSnapshot(collection(db, "businesses", CLIENT_ID, "timeBlocks"), (snap) => {
       setTimeBlocks(snap.docs.map(d => ({ id: d.id, ...d.data() } as TimeBlock)));
     });
 
-    return () => { unsubApp(); unsubServ(); unsubConfig(); unsubBlocks(); };
+    // 5. Metadados (Redes Sociais e Galeria)
+    const unsubVisual = onSnapshot(doc(db, "businesses", CLIENT_ID, "config", "metadata"), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.socialLinks) setSocialLinks(data.socialLinks);
+        if (data.galleryUrls) setGallery(data.galleryUrls);
+      }
+    });
+
+    return () => { unsubApp(); unsubServ(); unsubConfig(); unsubBlocks(); unsubVisual(); };
   }, []);
 
   // --- HANDLERS ---
@@ -105,6 +126,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       await setDoc(doc(db, "businesses", CLIENT_ID, "config", "work-schedule"), workConfig);
       alert("Configuração guardada.");
     } catch (e) { alert("Erro ao guardar."); }
+  };
+
+  const handleSaveVisual = async () => {
+    setLoadingVisual(true);
+    try {
+      await setDoc(doc(db, "businesses", CLIENT_ID, "config", "metadata"), {
+        socialLinks,
+        galleryUrls: gallery,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      alert("Identidade Visual atualizada!");
+    } catch (e) { alert("Erro ao salvar dados visuais."); }
+    setLoadingVisual(false);
   };
 
   const handleAddTimeBlock = async (e: React.FormEvent) => {
@@ -139,14 +173,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             </div>
           </div>
 
-          <nav className="flex bg-stone-800/40 p-1 rounded-2xl border border-white/5">
-            <button onClick={() => setActiveTab('appointments')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'appointments' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
+          <nav className="flex bg-stone-800/40 p-1 rounded-2xl border border-white/5 overflow-x-auto max-w-full">
+            <button onClick={() => setActiveTab('appointments')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 ${activeTab === 'appointments' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
               <LayoutDashboard size={16} /> MARCAÇÕES
             </button>
-            <button onClick={() => setActiveTab('services')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'services' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
+            <button onClick={() => setActiveTab('services')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 ${activeTab === 'services' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
               <Briefcase size={16} /> SERVIÇOS
             </button>
-            <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'settings' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
+            <button onClick={() => setActiveTab('visual')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 ${activeTab === 'visual' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
+              <Palette size={16} /> DESIGN
+            </button>
+            <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 ${activeTab === 'settings' ? 'bg-emerald-600 text-white shadow-lg' : 'text-stone-400 hover:text-stone-200'}`}>
               <Settings size={16} /> CONFIG
             </button>
           </nav>
@@ -269,6 +306,104 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
              </div>
           )}
 
+          {/* ABA: DESIGN (REDES SOCIAIS E FOTOS) */}
+          {activeTab === 'visual' && (
+            <div className="space-y-8 animate-in slide-in-from-bottom-4">
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Redes Sociais */}
+                <div className="bg-stone-900 border border-emerald-900/20 p-8 rounded-[3rem] shadow-2xl space-y-6">
+                  <h3 className="text-white font-bold flex items-center gap-3 text-lg">
+                    <Globe className="text-emerald-500"/> Redes Sociais
+                  </h3>
+                  <p className="text-stone-500 text-xs leading-relaxed italic">
+                    Insira o link completo (ex: https://instagram.com/labarbiere). Deixe vazio para ocultar o ícone no site.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500" size={18} />
+                      <input 
+                        placeholder="Link Instagram"
+                        className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500 transition-all"
+                        value={socialLinks.instagram}
+                        onChange={e => setSocialLinks({...socialLinks, instagram: e.target.value})}
+                      />
+                    </div>
+                    <div className="relative">
+                      <Facebook className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500" size={18} />
+                      <input 
+                        placeholder="Link Facebook"
+                        className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500 transition-all"
+                        value={socialLinks.facebook}
+                        onChange={e => setSocialLinks({...socialLinks, facebook: e.target.value})}
+                      />
+                    </div>
+                    <div className="relative">
+                      <Music2 className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500" size={18} />
+                      <input 
+                        placeholder="Link TikTok"
+                        className="w-full bg-stone-950 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500 transition-all"
+                        value={socialLinks.tiktok}
+                        onChange={e => setSocialLinks({...socialLinks, tiktok: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Info sobre Formato */}
+                <div className="bg-emerald-950/20 border border-emerald-500/20 p-8 rounded-[3rem] flex flex-col justify-center items-center text-center space-y-4">
+                  <div className="w-16 h-16 bg-emerald-600/20 rounded-full flex items-center justify-center text-emerald-500">
+                    <AlertTriangle size={32} />
+                  </div>
+                  <h4 className="text-white font-bold">Importante: Fotos WebP</h4>
+                  <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
+                    Para garantir que o seu site carregue rapidamente, todas as fotos devem estar no formato <b>.webp</b>. Use conversores online gratuitos se necessário.
+                  </p>
+                </div>
+              </div>
+
+              {/* Slots de Galeria */}
+              <div className="bg-stone-900 border border-emerald-900/20 p-8 rounded-[3rem] shadow-2xl">
+                <h3 className="text-white font-bold flex items-center gap-3 text-lg mb-8">
+                  <Camera className="text-emerald-500"/> Galeria de Fotos (8 Slots)
+                </h3>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {gallery.map((url, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <label className="text-[10px] uppercase font-black text-stone-500 ml-1 flex items-center gap-2">
+                        <Link size={10} /> Slot {idx + 1}
+                      </label>
+                      <input 
+                        placeholder="/images/foto01.webp"
+                        className="w-full bg-stone-950 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-emerald-500 transition-all"
+                        value={url}
+                        onChange={e => {
+                          const newG = [...gallery];
+                          newG[idx] = e.target.value;
+                          setGallery(newG);
+                        }}
+                      />
+                      {url && (
+                        <div className="h-20 rounded-xl overflow-hidden border border-white/5">
+                          <img src={url} alt="Preview" className="w-full h-full object-cover opacity-50" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <button 
+                  onClick={handleSaveVisual}
+                  disabled={loadingVisual}
+                  className="mt-10 w-full py-5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl shadow-xl transition-all flex justify-center items-center gap-3"
+                >
+                  {loadingVisual ? <Loader2 className="animate-spin" /> : <><Save size={20}/> Guardar Identidade Visual</>}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* ABA: CONFIGURAÇÃO */}
           {activeTab === 'settings' && (
             <div className="space-y-12 animate-in slide-in-from-bottom-4 pb-24">
@@ -335,7 +470,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                              <div className="flex gap-2">
                                {['daily', 'weekly', 'monthly'].map(type => (
                                  <button key={type} type="button" onClick={() => setNewBlock({...newBlock, recurringType: type as any})} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase border transition-all ${newBlock.recurringType === type ? 'bg-emerald-600 border-emerald-600 text-white shadow-md' : 'text-stone-500 border-white/5 hover:text-stone-300'}`}>
-                                   {type === 'daily' ? 'Diário' : type === 'weekly' ? 'Semanal' : 'Mensal'}
+                                   {type === 'daily' ? 'Diário' : type === 'weekly' ? 'Semanal' : 'Mensual'}
                                  </button>
                                ))}
                              </div>
@@ -372,7 +507,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       </main>
 
       <footer className="p-4 text-center text-stone-800 text-[10px] uppercase font-bold tracking-[0.4em] bg-stone-950 border-t border-white/5">
-        Sistema de Gestão {BUSINESS_INFO.name} • Allan Dev v2.2
+        Sistema de Gestão {BUSINESS_INFO.name} • Allan Dev v2.5
       </footer>
 
       {/* MODAL HÍBRIDO (CRIAÇÃO E EDIÇÃO) */}

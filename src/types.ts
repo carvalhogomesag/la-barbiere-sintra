@@ -45,5 +45,26 @@ export interface TimeBlock {
   endTime: string;
   isRecurring: boolean;
   recurringType?: 'daily' | 'weekly' | 'monthly';
-  repeatCount?: number; // Nova propriedade: quantas vezes repetir
+  repeatCount?: number; 
+}
+
+// --- NOVAS INTERFACES PARA REDES SOCIAIS E GALERIA ---
+
+export interface SocialLinks {
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
+  whatsapp?: string; // Caso o cliente queira mudar o número de reserva
+}
+
+export interface GalleryImage {
+  id: number;
+  url: string;
+  alt: string;
+}
+
+export interface BusinessProfile {
+  socialLinks: SocialLinks;
+  gallery: GalleryImage[];
+  updatedAt?: any;
 }

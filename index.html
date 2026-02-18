@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO & WhatsApp Preview -->
+    <title>La Barbière Espaço Homem | A Tua Barbearia em Sintra - Estilo e Brio</title>
+    <meta name="description" content="Descobre a La Barbière Espaço Homem em Sintra. Especialistas em cortes modernos, design de barba e um atendimento premium focado no perfeccionismo." />
+    
+    <!-- Metatags Open Graph (WhatsApp, Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://la-barbiere-sintra.netlify.app/" />
+    <meta property="og:title" content="La Barbière Espaço Homem | Sintra" />
+    <meta property="og:description" content="Mais do que uma barba, um estilo de vida. Vem conhecer o nosso espaço em Sintra." />
+    <meta property="og:image" content="https://la-barbiere-sintra.netlify.app/capa-whatsapp.webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- JSON-LD para Google Maps (SEO Local em Portugal) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BarberShop",
+      "name": "La Barbière Espaço Homem",
+      "telephone": "+351910152688",
+      "priceRange": "€€",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Heliodoro Salgado 102",
+        "addressLocality": "Sintra",
+        "postalCode": "2710-573",
+        "addressCountry": "PT"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 38.8021,
+        "longitude": -9.3813
+      }
+    }
+    </script>
+
+    <!-- ESTILOS Y FUENTES -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+      }
+      .font-serif {
+        font-family: 'Playfair Display', serif;
+      }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react": "https://esm.sh/react@^19.2.4",
+        "lucide-react": "https://esm.sh/lucide-react@^0.564.0"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="/src/index.css">
+  </head>
+  
+  <!-- Seleção em cor Emerald para combinar com a nova identidade -->
+  <body class="bg-black text-stone-100 selection:bg-emerald-600 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>

@@ -40,7 +40,7 @@ const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks,
   };
 
   const weekDays = getWeekDays(viewDate);
-  const weekRangeLabel = `${weekDays[0].toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })} - ${weekDays[5].toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}`;
+  const weekRangeLabel = `${weekDays[0].toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })} - ${weekDays[5].toLocaleDateString('pt-PT', { day: '2-digit', month: 'short', year: 'numeric' })}`;
 
   const changeWeek = (offset: number) => {
     const next = new Date(viewDate);
@@ -97,12 +97,12 @@ const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks,
       {/* CABEÇALHO DA AGENDA */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
         <div className="flex items-center gap-4">
-          <div className="bg-rose-600 p-2 rounded-xl shadow-lg shadow-rose-900/20">
+          <div className="bg-emerald-600 p-2 rounded-xl shadow-lg shadow-emerald-900/20">
             <CalendarIcon className="text-white" size={20} />
           </div>
           <div>
             <h3 className="text-white font-bold text-lg leading-tight">Vista Semanal</h3>
-            <p className="text-rose-500 text-[10px] font-black uppercase tracking-widest">{weekRangeLabel}</p>
+            <p className="text-emerald-500 text-[10px] font-black uppercase tracking-widest">{weekRangeLabel}</p>
           </div>
         </div>
 
@@ -112,9 +112,9 @@ const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks,
           </button>
           <button 
             onClick={() => setViewDate(new Date())} 
-            className="px-4 py-2 text-xs font-bold text-stone-300 hover:text-rose-500 transition-colors"
+            className="px-4 py-2 text-xs font-bold text-stone-300 hover:text-emerald-500 transition-colors"
           >
-            HOY
+            HOJE
           </button>
           <button onClick={() => changeWeek(1)} className="p-2 hover:bg-stone-800 rounded-xl text-stone-400 hover:text-white transition-all">
             <ChevronRight size={20}/>
@@ -132,11 +132,11 @@ const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks,
             {weekDays.map((day, i) => {
               const isToday = day.toDateString() === new Date().toDateString();
               return (
-                <div key={i} className={`p-3 text-center border-r border-white/5 last:border-0 ${isToday ? 'bg-rose-600/5' : ''}`}>
+                <div key={i} className={`p-3 text-center border-r border-white/5 last:border-0 ${isToday ? 'bg-emerald-600/5' : ''}`}>
                   <p className="text-[10px] font-black text-stone-500 uppercase tracking-tighter">
-                    {day.toLocaleDateString('es-ES', { weekday: 'short' })}
+                    {day.toLocaleDateString('pt-PT', { weekday: 'short' })}
                   </p>
-                  <p className={`text-lg font-serif font-bold ${isToday ? 'text-rose-500' : 'text-white'}`}>
+                  <p className={`text-lg font-serif font-bold ${isToday ? 'text-emerald-500' : 'text-white'}`}>
                     {day.getDate()}
                   </p>
                 </div>
@@ -200,21 +200,20 @@ const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks,
                         key={app.id}
                         onClick={(e) => {
                           e.preventDefault();
-                          e.stopPropagation(); // Impede o clique de fugir para o pai
+                          e.stopPropagation(); 
                           onEditAppointment(app);
                         }}
-                        className="absolute left-1.5 right-1.5 z-40 rounded-xl bg-stone-900 border-l-4 border-rose-600 p-2 shadow-2xl ring-1 ring-white/5 hover:ring-rose-500/50 hover:bg-stone-800 hover:scale-[1.02] hover:z-50 transition-all cursor-pointer group/card select-none"
+                        className="absolute left-1.5 right-1.5 z-40 rounded-xl bg-stone-900 border-l-4 border-emerald-600 p-2 shadow-2xl ring-1 ring-white/5 hover:ring-emerald-500/50 hover:bg-stone-800 hover:scale-[1.02] hover:z-50 transition-all cursor-pointer group/card select-none"
                         style={{ top: `${top}px`, height: `${height}px` }}
                       >
-                        {/* pointer-events-none no conteúdo garante que o clique caia no pai div */}
                         <div className="flex flex-col h-full overflow-hidden pointer-events-none">
                           <div className="flex justify-between items-start mb-1">
-                            <span className="text-[9px] font-black text-rose-500 uppercase leading-none truncate pr-1">
+                            <span className="text-[9px] font-black text-emerald-500 uppercase leading-none truncate pr-1">
                               {app.startTime}
                             </span>
-                            <Scissors size={10} className="text-stone-700 group-hover/card:text-rose-500 transition-colors shrink-0" />
+                            <Scissors size={10} className="text-stone-700 group-hover/card:text-emerald-500 transition-colors shrink-0" />
                           </div>
-                          <p className="text-xs font-bold text-white truncate leading-tight group-hover/card:text-rose-100 transition-colors">
+                          <p className="text-xs font-bold text-white truncate leading-tight group-hover/card:text-emerald-100 transition-colors">
                             {app.clientName}
                           </p>
                           {height > 45 && (
@@ -236,12 +235,12 @@ const AdminCalendar: React.FC<AdminCalendarProps> = ({ appointments, timeBlocks,
       {/* LEGENDA */}
       <div className="mt-4 flex gap-4 px-2">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-rose-600"></div>
-          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Citas (Clic para editar)</span>
+          <div className="w-2 h-2 rounded-full bg-emerald-600 shadow-sm shadow-emerald-900/40"></div>
+          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Marcações (Clica para editar)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-stone-800"></div>
-          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Bloqueos</span>
+          <div className="w-2 h-2 rounded-full bg-stone-800 border border-white/5"></div>
+          <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Bloqueios</span>
         </div>
       </div>
     </div>
